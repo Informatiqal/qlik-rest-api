@@ -1,6 +1,6 @@
 {
   "name": "qlik-rest-api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Interact with multiple Qlik Sense REST APIs",
   "author": {
     "email": "info@informatiqal.com",
@@ -47,10 +47,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/countnazgul/Qlik-Sense-Rest-API.git"
+    "url": "git+https://github.com/Informatiqal/qlik-rest-api.git"
   },
   "bugs": {
-    "url": "https://github.com/countnazgul/Qlik-Sense-Rest-API/issues"
+    "url": "https://github.com/Informatiqal/qlik-rest-api/issues"
   },
-  "homepage": "https://github.com/countnazgul/Qlik-Sense-Rest-API#readme"
+  "homepage": "https://informatiqal.com/qlik-sense-rest-api-package/"
 }
