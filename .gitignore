@@ -1,0 +1,5 @@
+node_modules/
+test/generic.spec.ts
+.env
+dist/
+*.svg

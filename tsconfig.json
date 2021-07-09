@@ -1,0 +1,35 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "target": "es6",
+        "noImplicitAny": true,
+        "lib": [
+            "es2018",
+            "dom",
+            "esnext"
+        ],
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "dist",
+        "declaration": true,
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "node_modules/*"
+            ]
+        },
+        "experimentalDecorators": true,
+        "typeRoots": [
+            "./types/**/*",
+            "./node_modules/@types/"
+        ]
+    },
+    "include": [
+        "src/**/*",
+    ],
+    "exclude": [
+        "node_modules",
+    ]
+}
