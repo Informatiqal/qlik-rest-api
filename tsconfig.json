@@ -1,35 +1,17 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "outDir": "./dist",
+        "target": "ES5",
         "esModuleInterop": true,
-        "resolveJsonModule": true,
-        "target": "es6",
-        "noImplicitAny": true,
-        "lib": [
-            "es2018",
-            "dom",
-            "esnext"
-        ],
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "outDir": "dist",
         "declaration": true,
-        "baseUrl": ".",
-        "paths": {
-            "*": [
-                "node_modules/*"
-            ]
-        },
-        "experimentalDecorators": true,
-        "typeRoots": [
-            "./types/**/*",
-            "./node_modules/@types/"
-        ]
+        "declarationDir": "./dist",
+        "module": "es6",
+        "noImplicitAny": true,
     },
     "include": [
-        "src/**/*",
+        "src/**/*"
     ],
     "exclude": [
-        "node_modules",
+        "node_modules"
     ]
 }
