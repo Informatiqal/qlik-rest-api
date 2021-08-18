@@ -4,3 +4,4 @@ test/generic.spec.ts
 dist/
 *.svg
 tsconfig copy.json
+index.doc.ts

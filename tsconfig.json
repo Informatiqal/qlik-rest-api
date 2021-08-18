@@ -7,6 +7,7 @@
         "declarationDir": "./dist",
         "module": "es6",
         "noImplicitAny": true,
+        "moduleResolution": "Node"
     },
     "include": [
         "src/**/*"
