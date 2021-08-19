@@ -5,3 +5,4 @@ dist/
 *.svg
 tsconfig copy.json
 index.doc.ts
+.npmrc
