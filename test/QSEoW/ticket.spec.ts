@@ -1,5 +1,5 @@
 import chai from "chai";
-import { Util, TagOperations } from "../../tests/util";
+import { Util, TagOperations } from "../../test/util";
 
 const expect = chai.expect;
 const util = new Util(true);

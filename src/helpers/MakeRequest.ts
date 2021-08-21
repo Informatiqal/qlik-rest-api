@@ -1,7 +1,5 @@
 import {
   IConfigFull,
-  // ICertCrtConfig,
-  // ICertPfxConfig,
   IHeaderConfig,
   IJWTConfig,
   ISessionConfig,
@@ -12,6 +10,7 @@ import {
 
 import axios, {
   AxiosError,
+  AxiosInstance,
   AxiosRequestConfig,
   AxiosResponse,
   ResponseType,
@@ -29,6 +28,7 @@ export class MakeRequest {
   requestConfig: AxiosRequestConfig;
   xrfKey: string;
   qlikTicket: string;
+  instance: AxiosInstance;
 
   constructor(configFull: IConfigFull) {
     this.configFull = configFull;
@@ -41,6 +41,31 @@ export class MakeRequest {
         "X-Qlik-Xrfkey": "",
       },
     };
+
+    this.instance = axios.create();
+    this.instance.interceptors.response.use(
+      this.RedirectInterceptor,
+      function (e: AxiosError) {
+        throw {
+          status: e.response.status,
+          statusText: e.response.statusText,
+          message: e.message,
+        };
+      }
+    );
+
+    this.instance.interceptors.response.use(
+      this.SaasPagingInterceptor,
+      function (e: AxiosError) {
+        throw e;
+      }
+      //   throw {
+      //     status: e.response.status,
+      //     statusText: e.response.statusText,
+      //     message: e.message,
+      //   };
+      // }
+    );
 
     this.SetHttpsAgent();
     this.SetHeader();
@@ -65,7 +90,7 @@ export class MakeRequest {
   }
 
   async Get(): Promise<IHttpReturn> {
-    return await axios(this.requestConfig)
+    return await this.instance(this.requestConfig)
       .catch((e: AxiosError) => {
         throw new Error(e.message);
       })
@@ -81,7 +106,7 @@ export class MakeRequest {
   async Delete(): Promise<IHttpReturn> {
     this.requestConfig.method = "DELETE";
 
-    return await axios(this.requestConfig)
+    return await this.instance(this.requestConfig)
       .catch((e: AxiosError) => {
         throw new Error(e.message);
       })
@@ -98,7 +123,7 @@ export class MakeRequest {
     this.requestConfig.method = "PATCH";
     this.requestConfig.data = data;
 
-    return await axios(this.requestConfig)
+    return await this.instance(this.requestConfig)
       .catch((e: AxiosError) => {
         throw new Error(e.message);
       })
@@ -115,7 +140,7 @@ export class MakeRequest {
     this.requestConfig.method = "POST";
     this.requestConfig.data = data;
 
-    return await axios(this.requestConfig)
+    return await this.instance(this.requestConfig)
       .catch((e: AxiosError) => {
         throw new Error(e.message);
       })
@@ -132,7 +157,7 @@ export class MakeRequest {
     this.requestConfig.method = "PUT";
     this.requestConfig.data = data;
 
-    return await axios(this.requestConfig)
+    return await this.instance(this.requestConfig)
       .catch((e: AxiosError) => {
         throw new Error(e.message);
       })
@@ -194,5 +219,57 @@ export class MakeRequest {
         .ticket;
       this.qlikTicket = ticket;
     }
+  }
+
+  private async RedirectInterceptor(response: AxiosResponse) {
+    if (!response.headers.location) return response;
+
+    if (response.headers.location) {
+      const redirectConfig: AxiosRequestConfig = {
+        method: "get",
+        responseType: "arraybuffer",
+        url: `${response.config.baseURL}${response.headers.location}`,
+        headers: {
+          Authorization: response.config.headers["Authorization"],
+        },
+      };
+
+      return await this.instance(redirectConfig);
+    }
+
+    throw new Error(`Something wend wrong while processing the response`);
+  }
+
+  private async SaasPagingInterceptor(response: AxiosResponse) {
+    let dataExtractComplete = false;
+    let returnData: any = [];
+    let resp = response;
+
+    if (response.data && response.data.data) returnData = response.data.data;
+    if (response.data && !response.data.data) returnData = response.data;
+
+    if (!response.data.links) return resp;
+
+    while (dataExtractComplete == false) {
+      if (resp.data.links && (resp.data.links.next || resp.data.links.Next)) {
+        let nextPageConf = { ...resp.config };
+        nextPageConf.url = resp.data.links.next.href
+          ? resp.data.links.next.href
+          : resp.data.links.Next.Href;
+        await axios(nextPageConf).then((r: AxiosResponse) => {
+          returnData = [...returnData, ...r.data.data];
+          resp = r;
+          dataExtractComplete =
+            resp.data.links.next || resp.data.links.Next ? false : true;
+        });
+      } else {
+        dataExtractComplete = true;
+      }
+    }
+
+    delete resp.data.links;
+    resp.data.data = returnData;
+
+    return resp;
   }
 }

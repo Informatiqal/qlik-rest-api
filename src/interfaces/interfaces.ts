@@ -23,20 +23,23 @@ export interface ISessionConfig {
   cookieHeaderName: string;
 }
 
+export interface ISaaSToken extends IJWTConfig {}
+
 export interface IConfig {
   host: string;
   port?: number;
   proxy?: string;
   notSecure?: boolean;
   headers?: string[];
-  cookies?: string[];
+  // cookies?: string[];
   httpsAgent?: any;
   authentication:
     | IHeaderConfig
     | IJWTConfig
     | ISessionConfig
     | ITicketConfig
-    | ICertUser;
+    | ICertUser
+    | ISaaSToken;
 }
 
 export interface IConfigFull extends IConfig {

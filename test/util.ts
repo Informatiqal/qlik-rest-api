@@ -24,6 +24,7 @@ export class Util {
   public baseConfigJWT: IConfig;
   public baseConfigSession: IConfig;
   public baseConfigTicket: IConfig;
+  public baseConfigSaas: IConfig;
 
   constructor(loadCertificates?: boolean) {
     this.loadCertificates = loadCertificates || false;
@@ -111,6 +112,13 @@ export class Util {
       httpsAgent: this.httpsAgentSelfSigned,
       authentication: {
         token: process.env.AUTH_JWT_TOKEN,
+      },
+    };
+
+    this.baseConfigSaas = {
+      host: process.env.SAAS_URL,
+      authentication: {
+        token: process.env.SAAS_TOKEN,
       },
     };
 

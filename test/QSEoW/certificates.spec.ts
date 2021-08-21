@@ -4,7 +4,7 @@ import {
   TagOperations,
   ProxySessionOperation,
   EngineOperations,
-} from "../../tests/util";
+} from "../../test/util";
 
 const expect = chai.expect;
 const util = new Util(true);
@@ -65,7 +65,7 @@ describe("QSEoW (Certificates)", function () {
     const proxyOperations = new ProxySessionOperation(proxy);
     const sessions = await proxyOperations.getSessionAll();
 
-    expect(sessions.status).to.be.eq(201);
+    expect(sessions.status).to.be.eq(200);
   });
 
   it("Engine (Certificates) - GET (Healthcheck)", async function () {
