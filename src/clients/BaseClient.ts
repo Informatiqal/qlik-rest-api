@@ -12,9 +12,10 @@ export class QlikClient {
   async Get(
     url: string,
     contentType: string,
-    responseType?: ResponseType
+    responseType?: ResponseType,
+    ...args: any[]
   ): Promise<IHttpReturn> {
-    let request = new MakeRequest(this.configFull);
+    const request = new MakeRequest(this.configFull);
     request.PrepareRequestConfig(url, contentType, responseType);
     return await request.Get();
   }
@@ -24,7 +25,7 @@ export class QlikClient {
     contentType: string,
     responseType?: ResponseType
   ): Promise<IHttpReturn> {
-    let request = new MakeRequest(this.configFull);
+    const request = new MakeRequest(this.configFull);
     request.PrepareRequestConfig(url, contentType, responseType);
     return await request.Delete();
   }
@@ -35,7 +36,7 @@ export class QlikClient {
     contentType = "application/json",
     responseType?: ResponseType
   ): Promise<IHttpReturn> {
-    let request = new MakeRequest(this.configFull);
+    const request = new MakeRequest(this.configFull);
     request.PrepareRequestConfig(url, contentType, responseType);
     return await request.Post(data);
   }
@@ -46,7 +47,7 @@ export class QlikClient {
     contentType = "application/json",
     responseType?: ResponseType
   ): Promise<IHttpReturn> {
-    let request = new MakeRequest(this.configFull);
+    const request = new MakeRequest(this.configFull);
     request.PrepareRequestConfig(url, contentType, responseType);
     return await request.Post(data);
   }
@@ -57,7 +58,7 @@ export class QlikClient {
     contentType = "application/json",
     responseType?: ResponseType
   ): Promise<IHttpReturn> {
-    let request = new MakeRequest(this.configFull);
+    const request = new MakeRequest(this.configFull);
     request.PrepareRequestConfig(url, contentType, responseType);
     return await request.Put(data);
   }

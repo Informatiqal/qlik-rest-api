@@ -1,5 +1,5 @@
 import chai from "chai";
-import { Util, TagOperations, ProxySessionOperation } from "../../tests/util";
+import { Util, TagOperations, ProxySessionOperation } from "../../test/util";
 import { QlikProxyClient, QlikRepositoryClient } from "../../src/index";
 import { ISessionConfig } from "../../src/interfaces/interfaces";
 
