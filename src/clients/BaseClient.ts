@@ -45,9 +45,15 @@ export class QlikClient {
     url: string,
     data: Object | BinaryType,
     contentType = "application/json",
-    responseType?: ResponseType
+    responseType?: ResponseType,
+    followLocation?: boolean,
+    returnLocation?: boolean
   ): Promise<IHttpReturn> {
-    const request = new MakeRequest(this.configFull);
+    const request = new MakeRequest(
+      this.configFull,
+      followLocation,
+      returnLocation
+    );
     request.PrepareRequestConfig(url, contentType, responseType);
     return await request.Post(data);
   }

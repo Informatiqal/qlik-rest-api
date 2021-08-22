@@ -29,9 +29,17 @@ export class MakeRequest {
   xrfKey: string;
   qlikTicket: string;
   instance: AxiosInstance;
+  private followLocation: boolean;
+  private returnLocation: boolean;
 
-  constructor(configFull: IConfigFull) {
+  constructor(
+    configFull: IConfigFull,
+    followLocation?: boolean,
+    returnLocation?: boolean
+  ) {
     this.configFull = configFull;
+    this.followLocation = followLocation || true;
+    this.returnLocation = returnLocation || false;
 
     this.requestConfig = {
       url: "",
@@ -224,7 +232,7 @@ export class MakeRequest {
   private async RedirectInterceptor(response: AxiosResponse) {
     if (!response.headers.location) return response;
 
-    if (response.headers.location) {
+    if (response.headers.location && this.followLocation) {
       const redirectConfig: AxiosRequestConfig = {
         method: "get",
         responseType: "arraybuffer",
@@ -235,6 +243,12 @@ export class MakeRequest {
       };
 
       return await this.instance(redirectConfig);
+    }
+
+    if (response.headers.location && !this.followLocation) {
+      if (this.returnLocation) return response.headers.location;
+
+      return response;
     }
 
     throw new Error(`Something wend wrong while processing the response`);
