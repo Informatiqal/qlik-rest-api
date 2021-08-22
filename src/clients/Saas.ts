@@ -60,13 +60,17 @@ export class QlikSaaSClient extends QlikClient {
     path: string,
     data: object,
     contentType = "application/json",
-    responseType?: ResponseType
+    responseType?: ResponseType,
+    followLocation?: boolean,
+    returnLocation?: boolean
   ): Promise<IHttpReturn> {
     return super.Post(
       `${this.configFull.baseUrl}/${path}`,
       data,
       contentType,
-      responseType
+      responseType,
+      followLocation,
+      returnLocation
     );
   }
 
