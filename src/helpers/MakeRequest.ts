@@ -90,7 +90,7 @@ export class MakeRequest {
     url: string,
     contentType: string,
     responseType?: ResponseType,
-    additionalHeaders?: { name: string; value: string }[]
+    additionalHeaders?: { name: string; value: string | number }[]
   ): void {
     this.requestConfig.url = setQlikTicket(url, this.qlikTicket);
     this.requestConfig.url = setURLXrfKey(this.requestConfig.url, this.xrfKey);

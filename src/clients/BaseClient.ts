@@ -48,7 +48,7 @@ export class QlikClient {
     responseType?: ResponseType,
     followLocation?: boolean,
     returnLocation?: boolean,
-    additionalHeaders?: { name: string; value: string }[]
+    additionalHeaders?: { name: string; value: string | number }[]
   ): Promise<IHttpReturn> {
     const request = new MakeRequest(
       this.configFull,

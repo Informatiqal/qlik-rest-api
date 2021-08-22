@@ -63,7 +63,7 @@ export class QlikSaaSClient extends QlikClient {
     responseType?: ResponseType,
     followLocation?: boolean,
     returnLocation?: boolean,
-    additionalHeaders?: { name: string; value: string }[]
+    additionalHeaders?: { name: string; value: string | number }[]
   ): Promise<IHttpReturn> {
     return super.Post(
       `${this.configFull.baseUrl}/${path}`,
