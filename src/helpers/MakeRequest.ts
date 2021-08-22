@@ -89,12 +89,24 @@ export class MakeRequest {
   PrepareRequestConfig(
     url: string,
     contentType: string,
-    responseType?: ResponseType
+    responseType?: ResponseType,
+    additionalHeaders?: { name: string; value: string }[]
   ): void {
     this.requestConfig.url = setQlikTicket(url, this.qlikTicket);
     this.requestConfig.url = setURLXrfKey(this.requestConfig.url, this.xrfKey);
     this.requestConfig.headers["Content-Type"] = contentType;
     if (responseType) this.requestConfig.responseType = responseType;
+
+    if (additionalHeaders && additionalHeaders.length > 0)
+      additionalHeaders.map((header) => {
+        try {
+          this.requestConfig.headers[header.name] = header.value;
+        } catch (e) {
+          throw new Error(
+            `Unable to add header "${header.name}" with value "${header.value}" to the request`
+          );
+        }
+      });
   }
 
   async Get(): Promise<IHttpReturn> {
