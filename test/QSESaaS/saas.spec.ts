@@ -13,7 +13,42 @@ describe("SaaS", function () {
     const saas = new QlikSaaSClient(util.baseConfigSaas);
 
     // const a = await saas.Get(`items?resourceType=app&limit=10`);
-    const a1 = await saas.Get(`items?resourceType=app`);
+    // const a1 = await saas.Get(`items?resourceType=app`);
+
+    const tempLocation = await saas.Post(
+      `apps/e40a69d5-c4ff-4512-b3ef-2ee3c004acf5/export`,
+      {},
+      "",
+      "json",
+      false,
+      true
+    );
+    // const qvfFile = fs.readFileSync(
+    //   "C:\\Users\\countnazgul\\Documents\\Qlik\\Sense\\Apps\\load test.qvf"
+    // );
+
+    // const a1 = await saas.Post(
+    //   "temp-contents/files",
+    //   qvfFile,
+    //   "application/octet-stream",
+    //   "json",
+    //   false,
+    //   true,
+    //   [
+    //     {
+    //       name: "Tus-Resumable",
+    //       value: "1.0.0",
+    //     },
+    //     {
+    //       name: "Upload-Length",
+    //       value: qvfFile.length,
+    //     },
+    //     {
+    //       name: "Upload-Metadata",
+    //       value: "filename bG9hZCB0ZXN0LnF2Zg==",
+    //     },
+    //   ]
+    // );
 
     // const a2 = await saas.Get(
     //   `apps/c1e6c393-34ab-44cb-833f-25c03676ac2f/data/metadata`

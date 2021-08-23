@@ -50,9 +50,40 @@ export class MakeRequest {
       },
     };
 
-    this.instance = axios.create();
+    const instance = axios.create();
+    // this.instance = axios.create();
+    this.instance = instance;
     this.instance.interceptors.response.use(
-      this.RedirectInterceptor,
+      // this.RedirectInterceptor,
+      async function (response: AxiosResponse) {
+        if (!response.headers.location) return response;
+
+        if (response.headers.location && followLocation) {
+          const redirectConfig: AxiosRequestConfig = {
+            method: "get",
+            responseType: "arraybuffer",
+            url: `${response.config.baseURL}${response.headers.location}`,
+            headers: {
+              Authorization: response.config.headers["Authorization"],
+            },
+          };
+
+          return await instance(redirectConfig);
+        }
+
+        if (response.headers.location && !followLocation) {
+          if (returnLocation) {
+            response.data = {
+              location: response.headers.location,
+            };
+          }
+
+          return response;
+        }
+
+        throw new Error(`Something wend wrong while processing the response`);
+      },
+
       function (e: AxiosError) {
         throw {
           status: e.response.status,
@@ -161,9 +192,9 @@ export class MakeRequest {
     this.requestConfig.data = data;
 
     return await this.instance(this.requestConfig)
-      .catch((e: AxiosError) => {
-        throw new Error(e.message);
-      })
+      // .catch((e: AxiosError) => {
+      //   throw new Error(e.message);
+      // })
       .then((response: AxiosResponse) => {
         return {
           status: response.status,
@@ -274,10 +305,18 @@ export class MakeRequest {
     if (response.data && response.data.data) returnData = response.data.data;
     if (response.data && !response.data.data) returnData = response.data;
 
-    if (!response.data.links) return resp;
+    if (response.data && !response.data.links) return resp;
 
     while (dataExtractComplete == false) {
-      if (resp.data.links && (resp.data.links.next || resp.data.links.Next)) {
+      if (!response.data) {
+        dataExtractComplete = true;
+      }
+
+      if (
+        resp.data &&
+        resp.data.links &&
+        (resp.data.links.next || resp.data.links.Next)
+      ) {
         let nextPageConf = { ...resp.config };
         nextPageConf.url = resp.data.links.next.href
           ? resp.data.links.next.href
@@ -293,8 +332,8 @@ export class MakeRequest {
       }
     }
 
-    delete resp.data.links;
-    resp.data.data = returnData;
+    // delete resp.data.links;
+    // resp.data.data = returnData;
 
     return resp;
   }
