@@ -51,10 +51,8 @@ export class MakeRequest {
     };
 
     const instance = axios.create();
-    // this.instance = axios.create();
     this.instance = instance;
     this.instance.interceptors.response.use(
-      // this.RedirectInterceptor,
       async function (response: AxiosResponse) {
         if (!response.headers.location) return response;
 
@@ -270,31 +268,6 @@ export class MakeRequest {
         .ticket;
       this.qlikTicket = ticket;
     }
-  }
-
-  private async RedirectInterceptor(response: AxiosResponse) {
-    if (!response.headers.location) return response;
-
-    if (response.headers.location && this.followLocation) {
-      const redirectConfig: AxiosRequestConfig = {
-        method: "get",
-        responseType: "arraybuffer",
-        url: `${response.config.baseURL}${response.headers.location}`,
-        headers: {
-          Authorization: response.config.headers["Authorization"],
-        },
-      };
-
-      return await this.instance(redirectConfig);
-    }
-
-    if (response.headers.location && !this.followLocation) {
-      if (this.returnLocation) return response.headers.location;
-
-      return response;
-    }
-
-    throw new Error(`Something wend wrong while processing the response`);
   }
 
   private async SaasPagingInterceptor(response: AxiosResponse) {
