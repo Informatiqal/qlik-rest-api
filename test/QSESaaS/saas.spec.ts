@@ -23,6 +23,20 @@ describe("SaaS", function () {
       false,
       true
     );
+
+    const appContent: string = await saas
+      .Get(
+        tempLocation.data.location.replace("/api/v1/", ""),
+        "application/octet-stream",
+        "arraybuffer"
+      )
+      .then((a) => a.data);
+
+    fs.writeFileSync(
+      "C:\\Users\\countnazgul\\Documents\\Qlik\\Sense\\Apps\\load test 123.qvf",
+      appContent
+    );
+
     // const qvfFile = fs.readFileSync(
     //   "C:\\Users\\countnazgul\\Documents\\Qlik\\Sense\\Apps\\load test.qvf"
     // );

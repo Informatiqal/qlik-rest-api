@@ -112,7 +112,6 @@ export class MakeRequest {
     this.SetTicket();
 
     this.xrfKey = generateXrfkey();
-    this.requestConfig.headers["X-Qlik-Xrfkey"] = this.xrfKey;
   }
 
   PrepareRequestConfig(
@@ -122,8 +121,16 @@ export class MakeRequest {
     additionalHeaders?: { name: string; value: string | number }[]
   ): void {
     this.requestConfig.url = setQlikTicket(url, this.qlikTicket);
-    this.requestConfig.url = setURLXrfKey(this.requestConfig.url, this.xrfKey);
-    this.requestConfig.headers["Content-Type"] = contentType;
+    if (this.requestConfig.url.indexOf("api/v1/temp-contents") == -1) {
+      this.requestConfig.headers["X-Qlik-Xrfkey"] = this.xrfKey;
+      this.requestConfig.url = setURLXrfKey(
+        this.requestConfig.url,
+        this.xrfKey
+      );
+    } else {
+      delete this.requestConfig.headers["X-Qlik-Xrfkey"];
+    }
+    if (contentType) this.requestConfig.headers["Content-Type"] = contentType;
     if (responseType) this.requestConfig.responseType = responseType;
 
     if (additionalHeaders && additionalHeaders.length > 0)
