@@ -1,6 +1,7 @@
 import chai from "chai";
 import { Util } from "../util";
 import fs from "fs";
+import { FormDataCustom } from "../../../qlik-saas-api/src/util/FormData";
 
 const expect = chai.expect;
 const util = new Util();
@@ -14,28 +15,51 @@ describe("SaaS", function () {
 
     // const a = await saas.Get(`items?resourceType=app&limit=10`);
     // const a1 = await saas.Get(`items?resourceType=app`);
-
-    const tempLocation = await saas.Post(
-      `apps/e40a69d5-c4ff-4512-b3ef-2ee3c004acf5/export`,
-      {},
-      "",
-      "json",
-      false,
-      true
+    const t = fs.readFileSync(
+      "D:\\DEV\\Informatiqal\\qlik-saas-api\\casual.zip"
     );
 
-    const appContent: string = await saas
-      .Get(
-        tempLocation.data.location.replace("/api/v1/", ""),
-        "application/octet-stream",
-        "arraybuffer"
-      )
-      .then((a) => a.data);
-
-    fs.writeFileSync(
-      "C:\\Users\\countnazgul\\Documents\\Qlik\\Sense\\Apps\\load test 123.qvf",
-      appContent
+    const fd = new FormDataCustom();
+    fd.append(
+      "data",
+      JSON.stringify({
+        tags: [],
+      })
     );
+
+    fd.append("file", t, "casual.zip");
+    const data = fd.getData();
+
+    let a = await saas
+      .Post(`themes`, data, fd.headers)
+      .then((res) => {
+        let a = 1;
+      })
+      .catch((e) => {
+        let a = 1;
+      });
+
+    // const tempLocation = await saas.Post(
+    //   `apps/e40a69d5-c4ff-4512-b3ef-2ee3c004acf5/export`,
+    //   {},
+    //   "",
+    //   "json",
+    //   false,
+    //   true
+    // );
+
+    // const appContent: string = await saas
+    //   .Get(
+    //     tempLocation.data.location.replace("/api/v1/", ""),
+    //     "application/octet-stream",
+    //     "arraybuffer"
+    //   )
+    //   .then((a) => a.data);
+
+    // fs.writeFileSync(
+    //   "C:\\Users\\countnazgul\\Documents\\Qlik\\Sense\\Apps\\load test 123.qvf",
+    //   appContent
+    // );
 
     // const qvfFile = fs.readFileSync(
     //   "C:\\Users\\countnazgul\\Documents\\Qlik\\Sense\\Apps\\load test.qvf"
@@ -83,7 +107,7 @@ describe("SaaS", function () {
 
     // const a6 = await saas.Delete(`apps/${a3.data.attributes.id}`);
 
-    expect(true).to.be.true;
+    // expect(true).to.be.true;
     // const tagOperations = new TagOperations(repo);
     // const {
     //   newTagData,

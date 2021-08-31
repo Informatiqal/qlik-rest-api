@@ -121,7 +121,7 @@ export class MakeRequest {
     additionalHeaders?: { name: string; value: string | number }[]
   ): void {
     this.requestConfig.url = setQlikTicket(url, this.qlikTicket);
-    if (this.requestConfig.url.indexOf("api/v1/temp-contents") == -1) {
+    if (this.requestConfig.url.indexOf("api/v1/") == -1) {
       this.requestConfig.headers["X-Qlik-Xrfkey"] = this.xrfKey;
       this.requestConfig.url = setURLXrfKey(
         this.requestConfig.url,
@@ -195,6 +195,16 @@ export class MakeRequest {
   async Post(data: object | BinaryType | string | Blob): Promise<IHttpReturn> {
     this.requestConfig.method = "POST";
     this.requestConfig.data = data;
+
+    // if (
+    //   this.requestConfig.headers["Content-Type"].indexOf(
+    //     "multipart/form-data"
+    //   ) > -1
+    // ) {
+    //   this.requestConfig.headers["content-length"] = Buffer.from(
+    //     data as string
+    //   ).length;
+    // }
 
     return await this.instance(this.requestConfig)
       // .catch((e: AxiosError) => {
