@@ -6,6 +6,7 @@ import {
   ITicketConfig,
   IHttpReturn,
   ICertUser,
+  ISaaSToken,
 } from "../interfaces/interfaces";
 
 import axios, {
@@ -255,6 +256,11 @@ export class MakeRequest {
     if ((this.configFull.authentication as IJWTConfig).token) {
       let token = (this.configFull.authentication as IJWTConfig).token;
       this.requestConfig.headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    if ((this.configFull.authentication as ISaaSToken).webIntegrationId) {
+      this.requestConfig.headers["qlik-web-integration-id"] = (this.configFull
+        .authentication as ISaaSToken).webIntegrationId;
     }
   }
 

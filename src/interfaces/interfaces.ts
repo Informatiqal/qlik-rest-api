@@ -23,7 +23,9 @@ export interface ISessionConfig {
   cookieHeaderName: string;
 }
 
-export interface ISaaSToken extends IJWTConfig {}
+export interface ISaaSToken extends IJWTConfig {
+  webIntegrationId?: string;
+}
 
 export interface IConfig {
   host: string;
