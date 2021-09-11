@@ -69,7 +69,11 @@ describe("QSEoW (Certificates)", function () {
   });
 
   it("Engine (Certificates) - GET (Healthcheck)", async function () {
-    // TBA
+    const repo = new QlikRepositoryClient(util.baseConfig);
+    const opsMonitorApps = await repo.Get(
+      "app/hublist?filter=name eq 'Operations Monitor'"
+    );
+
     expect(true).to.be.true;
   });
 });

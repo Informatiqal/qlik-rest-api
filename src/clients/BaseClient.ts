@@ -2,7 +2,7 @@ import { IConfigFull, IHttpReturn } from "../interfaces/interfaces";
 import { MakeRequest } from "../helpers/MakeRequest";
 import { ResponseType } from "axios";
 
-export class QlikClient {
+export abstract class QlikClient {
   configFull: IConfigFull;
 
   constructor(configFull: IConfigFull) {
@@ -10,39 +10,50 @@ export class QlikClient {
   }
 
   async Get(
-    url: string,
-    contentType: string,
-    responseType?: ResponseType,
-    ...args: any[]
+    path: string,
+    contentType?: string,
+    responseType?: ResponseType
   ): Promise<IHttpReturn> {
     const request = new MakeRequest(this.configFull);
-    request.PrepareRequestConfig(url, contentType, responseType);
+    request.PrepareRequestConfig(
+      `${this.configFull.baseUrl}/${path}`,
+      contentType,
+      responseType
+    );
     return await request.Get();
   }
 
   async Delete(
-    url: string,
+    path: string,
     contentType: string,
     responseType?: ResponseType
   ): Promise<IHttpReturn> {
     const request = new MakeRequest(this.configFull);
-    request.PrepareRequestConfig(url, contentType, responseType);
+    request.PrepareRequestConfig(
+      `${this.configFull.baseUrl}/${path}`,
+      contentType,
+      responseType
+    );
     return await request.Delete();
   }
 
   async Patch(
-    url: string,
+    path: string,
     data: object | BinaryType | string | Blob,
     contentType = "application/json",
     responseType?: ResponseType
   ): Promise<IHttpReturn> {
     const request = new MakeRequest(this.configFull);
-    request.PrepareRequestConfig(url, contentType, responseType);
+    request.PrepareRequestConfig(
+      `${this.configFull.baseUrl}/${path}`,
+      contentType,
+      responseType
+    );
     return await request.Post(data);
   }
 
   async Post(
-    url: string,
+    path: string,
     data: Object | BinaryType,
     contentType = "application/json",
     responseType?: ResponseType,
@@ -56,7 +67,7 @@ export class QlikClient {
       returnLocation
     );
     request.PrepareRequestConfig(
-      url,
+      `${this.configFull.baseUrl}/${path}`,
       contentType,
       responseType,
       additionalHeaders || []
@@ -65,13 +76,17 @@ export class QlikClient {
   }
 
   async Put(
-    url: string,
+    path: string,
     data: Object,
     contentType = "application/json",
     responseType?: ResponseType
   ): Promise<IHttpReturn> {
     const request = new MakeRequest(this.configFull);
-    request.PrepareRequestConfig(url, contentType, responseType);
+    request.PrepareRequestConfig(
+      `${this.configFull.baseUrl}/${path}`,
+      contentType,
+      responseType
+    );
     return await request.Put(data);
   }
 }

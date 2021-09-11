@@ -117,7 +117,7 @@ export class MakeRequest {
 
   PrepareRequestConfig(
     url: string,
-    contentType: string,
+    contentType = "application/json",
     responseType?: ResponseType,
     additionalHeaders?: { name: string; value: string | number }[]
   ): void {
@@ -155,7 +155,7 @@ export class MakeRequest {
         return {
           status: response.status,
           statusText: response.statusText,
-          data: response.data,
+          data: response.data.data ? response.data.data : response.data,
         };
       });
   }
@@ -197,27 +197,15 @@ export class MakeRequest {
     this.requestConfig.method = "POST";
     this.requestConfig.data = data;
 
-    // if (
-    //   this.requestConfig.headers["Content-Type"].indexOf(
-    //     "multipart/form-data"
-    //   ) > -1
-    // ) {
-    //   this.requestConfig.headers["content-length"] = Buffer.from(
-    //     data as string
-    //   ).length;
-    // }
-
-    return await this.instance(this.requestConfig)
-      // .catch((e: AxiosError) => {
-      //   throw new Error(e.message);
-      // })
-      .then((response: AxiosResponse) => {
+    return await this.instance(this.requestConfig).then(
+      (response: AxiosResponse) => {
         return {
           status: response.status,
           statusText: response.statusText,
           data: response.data,
         };
-      });
+      }
+    );
   }
 
   async Put(data: object | BinaryType | string | Blob): Promise<IHttpReturn> {
