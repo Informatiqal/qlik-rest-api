@@ -1,3 +1,5 @@
+![](https://badges.aleen42.com/src/mocha.svg) ![](./test/badge.png)
+
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T6T0148ZP)
 
 ## Qlik Sense REST API (Node/JavaScript)
