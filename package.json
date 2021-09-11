@@ -17,6 +17,7 @@
   "scripts": {
     "test": "mocha --reporter mochawesome --require ts-node/register test/**/*.spec.ts",
     "test-badge": "mocha --reporter mocha-badge-generator --reporter-options=badge_format=png,badge_output=badge.png --require ts-node/register test/**/*.spec.ts",
+    "docs": "npx typedoc src/index.doc.ts --name \"Qlik REST API\" --excludePrivate --hideGenerator",
     "build-tsc": "tsc",
     "build": "rollup -c",
     "watch": "rollup -cw"
@@ -52,6 +53,7 @@
     "rollup-plugin-typescript2": "^0.30.0",
     "svg2png": "^4.1.1",
     "ts-node": "^9.1.1",
+    "typedoc": "^0.22.2",
     "typescript": "^4.3.5"
   },
   "prettier": {
