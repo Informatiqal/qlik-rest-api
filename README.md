@@ -1,3 +1,5 @@
+![](https://badges.aleen42.com/src/mocha.svg) ![](./test/badge.png)
+
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T6T0148ZP)
 
 ## Qlik Sense REST API (Node/JavaScript)
@@ -25,6 +27,7 @@ Interact with Qlik Sense REST APIs (Repository, Proxy, Engine and SaaS) from a s
 - [Generic REST client](#Generic-REST-client)
 
 [Supported authentication methods](#Supported-authentication-methods)
+[Documentation](#Documentation)
 
 ## Motivation
 
@@ -271,5 +274,9 @@ let result = await repoClient.Get("about");
 - [x] Ticket
 
 ---
+
+## Documentation
+
+Documentation for all methods can be found [here](https://informatiqal.github.io/qlik-rest-api/modules.html)
 
 **NOT AFFILIATED WITH QLIK**

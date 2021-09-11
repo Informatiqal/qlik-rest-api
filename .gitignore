@@ -6,3 +6,4 @@ dist/
 tsconfig copy.json
 index.doc.ts
 .npmrc
+mochawesome-report/

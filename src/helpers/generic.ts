@@ -1,4 +1,4 @@
-import { ICertUser } from "../interfaces/interfaces";
+import { ICertUser, IConfig } from "../interfaces/interfaces";
 
 export function generateQlikUserHeader(config: ICertUser): string {
   if (config.user_dir && config.user_name)
@@ -45,4 +45,14 @@ export function generateUUID(): string {
       v = c == "x" ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
+}
+
+export function urlComponents(
+  config: IConfig
+): { proxy: string; protocol: string; port: string } {
+  return {
+    proxy: config.proxy ? `/${config.proxy}` : "",
+    protocol: config.notSecure ? "http" : "https",
+    port: config.port ? `:${config.port}` : "",
+  };
 }

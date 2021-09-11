@@ -1,84 +1,14 @@
-import { IConfig, IConfigFull, IHttpReturn } from "../interfaces/interfaces";
-import { ResponseType } from "axios";
+import { IConfig } from "../interfaces/interfaces";
 import { QlikClient } from "./BaseClient";
+import { urlComponents } from "../helpers/generic";
 
 export class QlikProxyClient extends QlikClient {
   constructor(config: IConfig) {
-    let proxy = config.proxy ? `/${config.proxy}` : "";
-    let protocol = config.notSecure ? "http" : "https";
-    let port = config.port ? `:${config.port}` : "";
+    const { proxy, protocol, port } = urlComponents(config);
 
-    let configFull: IConfigFull = {
+    super({
       ...config,
       baseUrl: `${protocol}://${config.host}${port}${proxy}/qps`,
-    };
-
-    super(configFull);
-  }
-
-  Get(
-    path: string,
-    contentType = "application/json",
-    responseType?: ResponseType
-  ): Promise<IHttpReturn> {
-    return super.Get(
-      `${this.configFull.baseUrl}/${path}`,
-      contentType,
-      responseType
-    );
-  }
-
-  Delete(
-    path: string,
-    contentType = "application/json",
-    responseType?: ResponseType
-  ) {
-    return super.Delete(
-      `${this.configFull.baseUrl}/${path}`,
-      contentType,
-      responseType
-    );
-  }
-
-  Patch(
-    path: string,
-    data: object,
-    contentType = "application/json",
-    responseType?: ResponseType
-  ): Promise<IHttpReturn> {
-    return super.Post(
-      `${this.configFull.baseUrl}/${path}`,
-      data,
-      contentType,
-      responseType
-    );
-  }
-
-  Post(
-    path: string,
-    data: object,
-    contentType = "application/json",
-    responseType?: ResponseType
-  ): Promise<IHttpReturn> {
-    return super.Post(
-      `${this.configFull.baseUrl}/${path}`,
-      data,
-      contentType,
-      responseType
-    );
-  }
-
-  Put(
-    path: string,
-    data: object,
-    contentType = "application/json",
-    responseType?: ResponseType
-  ): Promise<IHttpReturn> {
-    return super.Put(
-      `${this.configFull.baseUrl}/${path}`,
-      data,
-      contentType,
-      responseType
-    );
+    });
   }
 }
