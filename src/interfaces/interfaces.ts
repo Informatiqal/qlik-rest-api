@@ -35,6 +35,7 @@ export interface IConfig {
   headers?: string[];
   // cookies?: string[];
   httpsAgent?: any;
+  saasVersion?: number;
   authentication:
     | IHeaderConfig
     | IJWTConfig

@@ -74,13 +74,17 @@ export class MakeRequest {
           if (returnLocation) {
             response.data = {
               location: response.headers.location,
+              id:
+                response.headers.location.indexOf("/temp-contents/files") > -1
+                  ? response.headers.location.split("/").pop()
+                  : null,
             };
           }
 
           return response;
         }
 
-        throw new Error(`Something wend wrong while processing the response`);
+        throw new Error(`Something went wrong while processing the response`);
       },
 
       function (e: AxiosError) {
@@ -171,12 +175,12 @@ export class MakeRequest {
         return {
           status: response.status,
           statusText: response.statusText,
-          data: response.data,
+          data: response.data || {},
         };
       });
   }
 
-  async Patch(data: object): Promise<IHttpReturn> {
+  async Patch(data: object | BinaryType | string | Blob): Promise<IHttpReturn> {
     this.requestConfig.method = "PATCH";
     this.requestConfig.data = data;
 
@@ -286,6 +290,9 @@ export class MakeRequest {
     let returnData: any = [];
     let resp = response;
 
+    // SaaS returns an empty response with DELETE method
+    if (response.data == "") return response;
+
     if (response.data && response.data.data) returnData = response.data.data;
     if (response.data && !response.data.data) returnData = response.data;
 
@@ -301,10 +308,21 @@ export class MakeRequest {
         resp.data.links &&
         (resp.data.links.next || resp.data.links.Next)
       ) {
-        let nextPageConf = { ...resp.config };
-        nextPageConf.url = resp.data.links.next.href
+        if (resp.data.links.next && resp.data.links.next.href == "") {
+          dataExtractComplete = true;
+          break;
+        }
+        if (resp.data.links.Next && resp.data.links.Next.Href == "") {
+          dataExtractComplete = true;
+          break;
+        }
+
+        let nextPageUrl = resp.data.links.next.href
           ? resp.data.links.next.href
           : resp.data.links.Next.Href;
+
+        let nextPageConf = { ...resp.config };
+        nextPageConf.url = nextPageUrl;
         await axios(nextPageConf).then((r: AxiosResponse) => {
           returnData = [...returnData, ...r.data.data];
           resp = r;
@@ -316,8 +334,8 @@ export class MakeRequest {
       }
     }
 
-    // delete resp.data.links;
-    // resp.data.data = returnData;
+    delete resp.data.links;
+    resp.data.data = returnData;
 
     return resp;
   }

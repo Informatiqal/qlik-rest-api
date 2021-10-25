@@ -1,7 +1,7 @@
 import chai from "chai";
 import { Util } from "../util";
 import fs from "fs";
-import { FormDataCustom } from "../../../qlik-saas-api/src/util/FormData";
+import { QlikFormData } from "../../src/helpers/FormData";
 
 const expect = chai.expect;
 const util = new Util();
@@ -10,117 +10,112 @@ import { QlikSaaSClient } from "../../src/index";
 
 describe("SaaS", function () {
   this.timeout(30000);
-  it("Repository (JWT) - DELETE, GET, POST and PUT (Tag)", async function () {
+
+  // Test retrieving paginated data by applying limit parameter
+  it("Get, limit and paginate data", async function () {
     const saas = new QlikSaaSClient(util.baseConfigSaas);
+    const limit = 10;
 
-    // const a = await saas.Get(`items?resourceType=app&limit=10`);
-    // const a1 = await saas.Get(`items?resourceType=app`);
-    const t = fs.readFileSync(
-      "D:\\DEV\\Informatiqal\\qlik-saas-api\\casual.zip"
-    );
+    const items = await saas.Get(`items?limit=${limit}`);
 
-    const fd = new FormDataCustom();
+    expect(items.data.length).to.be.greaterThan(10);
+  });
+
+  // Uploading resources to SaaS (theme, extension etc) is done
+  // via FormData. This test demonstrates how to use
+  // the built-in QlikFormData class
+  it("FormData upload", async function () {
+    const saas = new QlikSaaSClient(util.baseConfigSaas);
+    const themes = await saas.Get(`themes`);
+
+    // If the theme already exists - remove it
+    const themeExists = themes.data.filter((t) => t.name == "Casual");
+    if (themeExists.length > 0)
+      await saas.Delete(`themes/${themeExists[0].id}`);
+
+    const theme = fs.readFileSync(process.env.THEME_PATH);
+    const fd = new QlikFormData();
     fd.append(
       "data",
       JSON.stringify({
         tags: [],
       })
     );
+    fd.append("file", theme, "casual.zip");
 
-    fd.append("file", t, "casual.zip");
-    const data = fd.getData();
+    const newTheme = await saas.Post(`themes`, fd.data, fd.headers);
 
-    let a = await saas
-      .Post(`themes`, data, fd.headers)
-      .then((res) => {
-        let a = 1;
-      })
-      .catch((e) => {
-        let a = 1;
-      });
+    const deleteNewTheme = await saas.Delete(`themes/${newTheme.data.id}`);
 
-    // const tempLocation = await saas.Post(
-    //   `apps/e40a69d5-c4ff-4512-b3ef-2ee3c004acf5/export`,
-    //   {},
-    //   "",
-    //   "json",
-    //   false,
-    //   true
-    // );
+    expect(newTheme.data).to.have.property("id") &&
+      expect(deleteNewTheme.status).to.be.equal(204);
+  });
 
-    // const appContent: string = await saas
-    //   .Get(
-    //     tempLocation.data.location.replace("/api/v1/", ""),
-    //     "application/octet-stream",
-    //     "arraybuffer"
-    //   )
-    //   .then((a) => a.data);
+  // Update and existing object in SaaS
+  it("Update data", async function () {
+    const saas = new QlikSaaSClient(util.baseConfigSaas);
 
-    // fs.writeFileSync(
-    //   "C:\\Users\\countnazgul\\Documents\\Qlik\\Sense\\Apps\\load test 123.qvf",
-    //   appContent
-    // );
+    const newApp = await saas.Post("apps", {
+      attributes: {
+        name: "TEST App",
+        description: "Qlik Rest API TEST",
+      },
+    });
 
-    // const qvfFile = fs.readFileSync(
-    //   "C:\\Users\\countnazgul\\Documents\\Qlik\\Sense\\Apps\\load test.qvf"
-    // );
+    const updateAppName = await saas.Put(`apps/${newApp.data.attributes.id}`, {
+      attributes: {
+        name: "TEST App (updated)",
+      },
+    });
 
-    // const a1 = await saas.Post(
-    //   "temp-contents/files",
-    //   qvfFile,
-    //   "application/octet-stream",
-    //   "json",
-    //   false,
-    //   true,
-    //   [
-    //     {
-    //       name: "Tus-Resumable",
-    //       value: "1.0.0",
-    //     },
-    //     {
-    //       name: "Upload-Length",
-    //       value: qvfFile.length,
-    //     },
-    //     {
-    //       name: "Upload-Metadata",
-    //       value: "filename bG9hZCB0ZXN0LnF2Zg==",
-    //     },
-    //   ]
-    // );
+    const deleteApp = await saas.Delete(`apps/${newApp.data.attributes.id}`);
 
-    // const a2 = await saas.Get(
-    //   `apps/c1e6c393-34ab-44cb-833f-25c03676ac2f/data/metadata`
-    // );
+    expect(newApp.data.attributes).to.have.property("id") &&
+      expect(updateAppName.data.attributes.name).to.be.equal(
+        "TEST App (updated)"
+      ) &&
+      expect(deleteApp.status).to.be.equal(200);
+  });
 
-    // const a3 = await saas.Post(`apps`, {
-    //   attributes: {
-    //     name: "whatever",
-    //     description: "string",
-    //   },
-    // });
+  // Upload file as temp content
+  it("Uploading content with octet-stream ", async function () {
+    const saas = new QlikSaaSClient(util.baseConfigSaas);
 
-    // const a5 = await saas.Put(`apps/${a3.data.attributes.id}`, {
-    //   attributes: {
-    //     name: "other whatever",
-    //   },
-    // });
+    // read the qvf as binary
+    const qvfFile = fs.readFileSync(process.env.SAAS_QVF);
+    //
+    const appName = "License Monitor.qvf";
+    const appNameEncoded = Buffer.from(appName).toString("base64");
 
-    // const a6 = await saas.Delete(`apps/${a3.data.attributes.id}`);
+    // upload the file to qlik's temp location
+    const tempContentLocation = await saas.Post(
+      "temp-contents/files",
+      qvfFile,
+      "application/octet-stream",
+      "json",
+      false,
+      true,
+      [
+        {
+          name: "Tus-Resumable",
+          value: "1.0.0",
+        },
+        {
+          name: "Upload-Length",
+          value: qvfFile.length,
+        },
+        {
+          name: "Upload-Metadata",
+          value: `filename ${appNameEncoded}, ttl 10000`,
+        },
+      ]
+    );
 
-    // expect(true).to.be.true;
-    // const tagOperations = new TagOperations(repo);
-    // const {
-    //   newTagData,
-    //   getTagData,
-    //   deleteTagData,
-    //   updateTagData,
-    // } = await tagOperations.run();
+    // get the temp file details
+    const contentDetails = await saas.Get(
+      `temp-contents/${tempContentLocation.data.id}/details`
+    );
 
-    // expect(newTagData.status).to.be.eq(201) &&
-    //   expect(getTagData.status).to.be.eq(200) &&
-    //   expect(getTagData.data[0].id).to.be.eq(newTagData.data.id) &&
-    //   expect(updateTagData.status).to.be.eq(200) &&
-    //   expect(updateTagData.data.name).to.be.eq(tagOperations.tagNewName) &&
-    //   expect(deleteTagData.status).to.be.eq(204);
+    expect(qvfFile.length).to.be.equal(contentDetails.data.Size);
   });
 });
