@@ -15,7 +15,7 @@
     "node": ">=8"
   },
   "scripts": {
-    "test": "mocha --reporter mochawesome --require ts-node/register test/**/*.spec.ts",
+    "test": "mocha --require ts-node/register test/**/*.spec.ts",
     "test-badge": "mocha --reporter mocha-badge-generator --reporter-options=badge_format=png,badge_output=badge.png --require ts-node/register test/**/*.spec.ts",
     "docs": "npx typedoc src/index.doc.ts --name \"Qlik REST API\" --excludePrivate --hideGenerator --darkHighlightTheme dark-plus",
     "build-tsc": "tsc",
