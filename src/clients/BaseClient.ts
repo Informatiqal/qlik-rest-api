@@ -25,7 +25,7 @@ export abstract class QlikClient {
 
   async Delete(
     path: string,
-    contentType: string,
+    contentType?: string,
     responseType?: ResponseType
   ): Promise<IHttpReturn> {
     const request = new MakeRequest(this.configFull);
@@ -41,15 +41,17 @@ export abstract class QlikClient {
     path: string,
     data: object | BinaryType | string | Blob,
     contentType = "application/json",
+    additionalHeaders?: { name: string; value: string | number }[],
     responseType?: ResponseType
   ): Promise<IHttpReturn> {
     const request = new MakeRequest(this.configFull);
     request.PrepareRequestConfig(
       `${this.configFull.baseUrl}/${path}`,
       contentType,
-      responseType
+      responseType,
+      additionalHeaders || []
     );
-    return await request.Post(data);
+    return await request.Patch(data);
   }
 
   async Post(
