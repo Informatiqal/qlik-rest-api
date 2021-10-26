@@ -43,7 +43,7 @@ describe("SaaS", function () {
     );
     fd.append("file", theme, "casual.zip");
 
-    const newTheme = await saas.Post(`themes`, fd.data, fd.headers);
+    const newTheme = await saas.Post(`themes`, fd.getData, fd.getHeaders);
 
     const deleteNewTheme = await saas.Delete(`themes/${newTheme.data.id}`);
 

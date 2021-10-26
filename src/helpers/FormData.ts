@@ -1,8 +1,8 @@
 export class QlikFormData {
   private boundary: string;
   private streams: any[];
-  headers: string;
-  data: Buffer;
+  private headers: string;
+  private data: Buffer;
   constructor() {
     this.streams = [];
     this.generateBoundary();
@@ -24,6 +24,26 @@ export class QlikFormData {
     this.headers = "multipart/form-data; boundary=" + this.boundary;
   }
 
+  /**
+   *  Return the generated data
+   */
+  get getData(): Buffer {
+    return this.data;
+  }
+
+  /**
+   *  Return the generated headers
+   */
+  get getHeaders(): string {
+    return this.headers;
+  }
+
+  /**
+   *
+   * @param field type of the field
+   * @param data the actual data for the field
+   * @param fileName name of the file
+   */
   append(field: "data" | "file", data: any, fileName?: string) {
     // remove the last entry if appending more than one
     this.streams.pop();
@@ -67,6 +87,9 @@ export class QlikFormData {
     return dataBuffer;
   }
 
+  /**
+   * Clear the data
+   */
   clear(): void {
     this.streams = [];
   }
