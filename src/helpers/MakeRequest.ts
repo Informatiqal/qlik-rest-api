@@ -38,6 +38,12 @@ export class MakeRequest {
     followLocation?: boolean,
     returnLocation?: boolean
   ) {
+    if (!configFull.host)
+      throw new Error(`Missing "host" property or it is empty`);
+
+    if (!configFull.authentication)
+      throw new Error(`Missing "authentication" property or it is empty`);
+
     this.configFull = configFull;
     this.followLocation = followLocation || true;
     this.returnLocation = returnLocation || false;
