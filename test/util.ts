@@ -7,6 +7,7 @@ import https from "https";
 import { generateUUID } from "../src/helpers/generic";
 
 import { IConfig, IHttpReturn } from "../src/interfaces/interfaces";
+import { QlikRepositoryClient } from "../src";
 
 export class Util {
   private crt: Buffer;
@@ -146,7 +147,7 @@ export class Util {
 }
 
 export class TagOperations {
-  private repoClient: any;
+  private repoClient: QlikRepositoryClient;
   public tagName = "Test Tag";
   public tagNewName = "TEST";
 

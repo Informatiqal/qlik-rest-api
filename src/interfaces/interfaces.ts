@@ -1,5 +1,6 @@
 import { AxiosResponse } from "axios";
 
+// type Context = "hub" | "qmc" | "both" | "BothQlikSenseAndQMC";
 export interface ICertUser {
   user_dir?: string;
   user_name?: string;
@@ -36,6 +37,7 @@ export interface IConfig {
   // cookies?: string[];
   httpsAgent?: any;
   saasVersion?: number;
+  // context?: Context;
   authentication:
     | IHeaderConfig
     | IJWTConfig

@@ -3,18 +3,19 @@ import {
   Util,
   TagOperations,
   ProxySessionOperation,
-  EngineOperations,
+  // EngineOperations,
 } from "../../test/util";
 
 const expect = chai.expect;
 const util = new Util(true);
 
 import {
-  QlikEngineClient,
-  //   QlikGenericRestClient,
+  // QlikEngineClient,
+  // QlikGenericRestClient,
   QlikProxyClient,
   QlikRepositoryClient,
 } from "../../src/index";
+// import { IHeaderConfig } from "../../src/interfaces/interfaces";
 
 describe("QSEoW (Certificates)", function () {
   this.timeout(30000);
@@ -22,12 +23,8 @@ describe("QSEoW (Certificates)", function () {
     const repo = new QlikRepositoryClient(util.baseConfig);
 
     const tagOperations = new TagOperations(repo);
-    const {
-      newTagData,
-      getTagData,
-      deleteTagData,
-      updateTagData,
-    } = await tagOperations.run();
+    const { newTagData, getTagData, deleteTagData, updateTagData } =
+      await tagOperations.run();
 
     expect(newTagData.status).to.be.eq(201) &&
       expect(getTagData.status).to.be.eq(200) &&
@@ -44,11 +41,8 @@ describe("QSEoW (Certificates)", function () {
     const proxy = new QlikProxyClient(localConfig);
 
     const proxyOperations = new ProxySessionOperation(proxy);
-    const {
-      newSessionData,
-      deleteSessionData,
-      getSessionData,
-    } = await proxyOperations.run();
+    const { newSessionData, deleteSessionData, getSessionData } =
+      await proxyOperations.run();
 
     expect(newSessionData.status).to.be.eq(201) &&
       expect(getSessionData.status).to.be.eq(200) &&

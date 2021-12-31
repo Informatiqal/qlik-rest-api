@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.2] - 2021-11-15
+
+### Added
+
+- (optional) specify attributes inside `authentication` section of the config object
+- (optional) specify the context of the request (`hub`, `qmc`, `both` or `BothQlikSenseAndQMC`) in the main section of the config object
+
 ## [1.3.1] - 2021-11-01
 
 ### Added

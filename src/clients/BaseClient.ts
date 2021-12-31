@@ -41,7 +41,7 @@ export abstract class QlikClient {
     path: string,
     data: object | BinaryType | string | Blob,
     contentType = "application/json",
-    additionalHeaders?: { name: string; value: string | number }[],
+    additionalHeaders?: { name: string; value: any }[],
     responseType?: ResponseType
   ): Promise<IHttpReturn> {
     const request = new MakeRequest(this.configFull);
@@ -61,7 +61,7 @@ export abstract class QlikClient {
     responseType?: ResponseType,
     followLocation?: boolean,
     returnLocation?: boolean,
-    additionalHeaders?: { name: string; value: string | number }[]
+    additionalHeaders?: { name: string; value: any }[]
   ): Promise<IHttpReturn> {
     const request = new MakeRequest(
       this.configFull,

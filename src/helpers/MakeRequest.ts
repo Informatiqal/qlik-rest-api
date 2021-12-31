@@ -121,6 +121,8 @@ export class MakeRequest {
     this.SetSession();
     this.SetUserHeader();
     this.SetTicket();
+    // this.SetAttributes();
+    // this.SetContext();
 
     this.xrfKey = generateXrfkey();
   }
@@ -129,7 +131,7 @@ export class MakeRequest {
     url: string,
     contentType = "application/json",
     responseType?: ResponseType,
-    additionalHeaders?: { name: string; value: string | number }[]
+    additionalHeaders?: { name: string; value: any }[]
   ): void {
     this.requestConfig.url = setQlikTicket(url, this.qlikTicket);
     if (this.requestConfig.url.indexOf("api/v1/") == -1) {
@@ -161,13 +163,11 @@ export class MakeRequest {
       .catch((e: AxiosError) => {
         throw new Error(e.message);
       })
-      .then((response: AxiosResponse) => {
-        return {
-          status: response.status,
-          statusText: response.statusText,
-          data: response.data.data ? response.data.data : response.data,
-        };
-      });
+      .then((response: AxiosResponse) => ({
+        status: response.status,
+        statusText: response.statusText,
+        data: response.data.data ? response.data.data : response.data,
+      }));
   }
 
   async Delete(): Promise<IHttpReturn> {
@@ -257,8 +257,9 @@ export class MakeRequest {
     }
 
     if ((this.configFull.authentication as ISaaSToken).webIntegrationId) {
-      this.requestConfig.headers["qlik-web-integration-id"] = (this.configFull
-        .authentication as ISaaSToken).webIntegrationId;
+      this.requestConfig.headers["qlik-web-integration-id"] = (
+        this.configFull.authentication as ISaaSToken
+      ).webIntegrationId;
     }
   }
 
@@ -290,6 +291,25 @@ export class MakeRequest {
       this.qlikTicket = ticket;
     }
   }
+
+  // private SetAttributes() {
+  //   if (this.configFull.authentication.attributes) {
+  //     if (!Array.isArray(this.configFull.authentication.attributes))
+  //       throw new Error(`Provided connection attributes are not an array`);
+
+  //     for (let attribute of this.configFull.authentication.attributes) {
+  //       Object.entries(attribute).map(([key, value]) => {
+  //         this.requestConfig.headers[key] = value;
+  //       });
+  //     }
+  //   }
+  // }
+
+  // private SetContext() {
+  //   if (this.configFull.context) {
+  //     this.requestConfig.headers["Context"] = this.configFull.context;
+  //   }
+  // }
 
   private async SaasPagingInterceptor(response: AxiosResponse) {
     let dataExtractComplete = false;

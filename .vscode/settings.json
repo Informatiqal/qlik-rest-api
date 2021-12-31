@@ -33,4 +33,11 @@
     "cSpell.ignoreWords": [
         "asdasd"
     ],
+    "spellright.language": [
+        "en"
+    ],
+    "spellright.documentTypes": [
+        "latex",
+        "plaintext"
+    ],
 }
