@@ -181,7 +181,7 @@ export class MakeRequest {
         return {
           status: response.status,
           statusText: response.statusText,
-          data: response.data || {},
+          data: response.data,
         };
       });
   }
@@ -212,7 +212,7 @@ export class MakeRequest {
         return {
           status: response.status,
           statusText: response.statusText,
-          data: response.data,
+          data: response.data || {},
         };
       }
     );
@@ -360,7 +360,14 @@ export class MakeRequest {
       }
     }
 
-    delete resp.data.links;
+    if (resp.data && resp.data.links) {
+      delete resp.data.links;
+    }
+
+    if (!resp.data) {
+      resp.data = {};
+    }
+
     resp.data.data = returnData;
 
     return resp;

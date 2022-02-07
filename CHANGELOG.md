@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.2] - 2022-02-07
+
+### Fix
+
+- failing when the response is `null` [#11](https://github.com/Informatiqal/qlik-rest-api/issues/11)
+
 ## [1.3.2] - 2021-11-15
 
 ### Changed
