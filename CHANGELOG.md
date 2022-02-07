@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.4] - 2022-02-07
+
+### Fix
+- probably wrong build was pushed?
+
 ## [1.3.3] - 2022-02-07
 
 ### Fix

@@ -360,12 +360,12 @@ export class MakeRequest {
       }
     }
 
-    if (resp.data && resp.data.links) {
-      delete resp.data.links;
-    }
-
     if (!resp.data) {
       resp.data = {};
+    }
+
+    if (resp.data.links) {
+      delete resp.data.links;
     }
 
     resp.data.data = returnData;
