@@ -2,9 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.5] - 2022-03-11
+
+### Fix
+
+- when request is failing even before its send then throw the real error message. For example: self-signed certificates. The request was failing before response is received and the error was about the response object missing. Now if response is missing the thrown error will have `status` and `statusText` as `undefined` and `message` will be the actual error message. In the self-signed cert example the message will be `unable to verify the first certificate`
+
 ## [1.3.4] - 2022-02-07
 
 ### Fix
+
 - probably wrong build was pushed?
 
 ## [1.3.3] - 2022-02-07

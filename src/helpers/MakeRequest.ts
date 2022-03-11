@@ -94,9 +94,16 @@ export class MakeRequest {
       },
 
       function (e: AxiosError) {
+        if (e.response)
+          throw {
+            status: e.response.status,
+            statusText: e.response.statusText,
+            message: e.message,
+          };
+
         throw {
-          status: e.response.status,
-          statusText: e.response.statusText,
+          status: undefined,
+          statusText: undefined,
           message: e.message,
         };
       }
