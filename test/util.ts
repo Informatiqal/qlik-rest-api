@@ -23,6 +23,7 @@ export class Util {
   public baseConfigPxf: IConfig;
   public baseConfigHeader: IConfig;
   public baseConfigJWT: IConfig;
+  public baseConfigJWTNoAgent: IConfig;
   public baseConfigSession: IConfig;
   public baseConfigTicket: IConfig;
   public baseConfigSaas: IConfig;
@@ -111,6 +112,14 @@ export class Util {
       host: process.env.TEST_HOST,
       proxy: process.env.AUTH_JWT_PROXY,
       httpsAgent: this.httpsAgentSelfSigned,
+      authentication: {
+        token: process.env.AUTH_JWT_TOKEN,
+      },
+    };
+
+    this.baseConfigJWTNoAgent = {
+      host: process.env.TEST_HOST,
+      proxy: process.env.AUTH_JWT_PROXY,
       authentication: {
         token: process.env.AUTH_JWT_TOKEN,
       },
