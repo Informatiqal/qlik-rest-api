@@ -42,7 +42,7 @@
     "chai": "4.3.6",
     "dotenv": "16.0.1",
     "es6-template-strings": "2.0.1",
-    "mocha": "9.2.2",
+    "mocha": "10.0.0",
     "mocha-badge-generator": "0.9.0",
     "nyc": "15.1.0",
     "prettier": "2.6.2",
