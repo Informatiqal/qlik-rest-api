@@ -7,3 +7,4 @@ tsconfig copy.json
 index.doc.ts
 .npmrc
 mochawesome-report/
+.vscode/settings.json
