@@ -25,6 +25,10 @@
   "files": [
     "dist/**/*"
   ],
+  "funding": {
+    "type": "kofi",
+    "url": "https://ko-fi.com/stefanstoichev"
+  },
   "keywords": [
     "qlik",
     "sense",
