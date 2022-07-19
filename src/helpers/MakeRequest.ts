@@ -350,6 +350,11 @@ export class MakeRequest {
           break;
         }
 
+        if (resp.data.links.next.href == null) {
+          dataExtractComplete = true;
+          break;
+        }
+
         let nextPageUrl = resp.data.links.next.href
           ? resp.data.links.next.href
           : resp.data.links.Next.Href;
