@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.9] - 2022-07-28
+
+### Fix
+
+- Return the response `data` object (if exists) in case of an error. Until now the thrown error object only contained the basic info - `status` and `message`. More info in [#67](https://github.com/Informatiqal/qlik-rest-api/issues/67)
+
+## [1.3.8] - 2022-07-19
+
+### Fix
+
+- `SaaS` - for some requests `next` parameter is `null`
+
 ## [1.3.7] - 2022-05-15
 
 ### Fix

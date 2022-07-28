@@ -94,6 +94,15 @@ export class MakeRequest {
       },
 
       function (e: AxiosError) {
+        if (e.response && e.response.data) {
+          throw {
+            status: e.response.status,
+            statusText: e.response.statusText,
+            message: e.message,
+            data: e.response.data,
+          };
+        }
+
         if (e.response)
           throw {
             status: e.response.status,
@@ -325,6 +334,8 @@ export class MakeRequest {
 
     // SaaS returns an empty response with DELETE method
     if (response.data == "") return response;
+
+    if (!response.data) return undefined;
 
     if (response.data && response.data.data) returnData = response.data.data;
     if (response.data && !response.data.data) returnData = response.data;

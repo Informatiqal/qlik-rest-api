@@ -54,5 +54,6 @@ export interface IConfigFull extends IConfig {
 export interface IHttpReturn {
   status: number;
   statusText: string;
-  data: AxiosResponse<any>["data"];
+  message?: string;
+  data?: AxiosResponse<any>["data"];
 }
