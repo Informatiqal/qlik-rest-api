@@ -16,7 +16,7 @@ describe("SaaS", function () {
     const saas = new QlikSaaSClient(util.baseConfigSaas);
     const limit = 10;
 
-    const items = await saas.Get(`items?limit=${limit}`);
+    const items = await saas.Get<[]>(`items?limit=${limit}`);
 
     expect(items.data.length).to.be.greaterThan(10);
   });
@@ -26,14 +26,14 @@ describe("SaaS", function () {
   // the built-in QlikFormData class
   it("FormData upload", async function () {
     const saas = new QlikSaaSClient(util.baseConfigSaas);
-    const themes = await saas.Get(`themes`);
+    const themes = await saas.Get<{ name: string; id: string }[]>(`themes`);
 
     // If the theme already exists - remove it
     const themeExists = themes.data.filter((t) => t.name == "Casual");
     if (themeExists.length > 0)
       await saas.Delete(`themes/${themeExists[0].id}`);
 
-    const theme = fs.readFileSync(process.env.THEME_PATH);
+    const theme = fs.readFileSync(<string>process.env.THEME_PATH);
     const fd = new QlikFormData();
     fd.append(
       "data",
@@ -43,7 +43,11 @@ describe("SaaS", function () {
     );
     fd.append("file", theme, "casual.zip");
 
-    const newTheme = await saas.Post(`themes`, fd.getData, fd.getHeaders);
+    const newTheme = await saas.Post<{ id: string }>(
+      `themes`,
+      fd.getData,
+      fd.getHeaders
+    );
 
     const deleteNewTheme = await saas.Delete(`themes/${newTheme.data.id}`);
 
@@ -55,18 +59,21 @@ describe("SaaS", function () {
   it("Update data", async function () {
     const saas = new QlikSaaSClient(util.baseConfigSaas);
 
-    const newApp = await saas.Post("apps", {
+    const newApp = await saas.Post<{ attributes: { id: string } }>("apps", {
       attributes: {
         name: "TEST App",
         description: "Qlik Rest API TEST",
       },
     });
 
-    const updateAppName = await saas.Put(`apps/${newApp.data.attributes.id}`, {
-      attributes: {
-        name: "TEST App (updated)",
-      },
-    });
+    const updateAppName = await saas.Put<{ attributes: { name: string } }>(
+      `apps/${newApp.data.attributes.id}`,
+      {
+        attributes: {
+          name: "TEST App (updated)",
+        },
+      }
+    );
 
     const deleteApp = await saas.Delete(`apps/${newApp.data.attributes.id}`);
 
@@ -82,13 +89,13 @@ describe("SaaS", function () {
     const saas = new QlikSaaSClient(util.baseConfigSaas);
 
     // read the qvf as binary
-    const qvfFile = fs.readFileSync(process.env.SAAS_QVF);
+    const qvfFile = fs.readFileSync(<string>process.env.SAAS_QVF);
     //
     const appName = "License Monitor.qvf";
     const appNameEncoded = Buffer.from(appName).toString("base64");
 
     // upload the file to qlik's temp location
-    const tempContentLocation = await saas.Post(
+    const tempContentLocation = await saas.Post<{ id: string }>(
       "temp-contents/files",
       qvfFile,
       "application/octet-stream",
@@ -112,10 +119,40 @@ describe("SaaS", function () {
     );
 
     // get the temp file details
-    const contentDetails = await saas.Get(
+    const contentDetails = await saas.Get<{ Size: number }>(
       `temp-contents/${tempContentLocation.data.id}/details`
     );
 
     expect(qvfFile.length).to.be.equal(contentDetails.data.Size);
+  });
+
+  it("TEST ", async function () {
+    const saas = new QlikSaaSClient(util.baseConfigSaas);
+    // const b = await saas.Get("items").catch((e) => {
+    const b = await saas
+      .Post("data-alerts", {
+        appId: "434758a9-e05d-417a-8f27-398dc9b1f375",
+        name: "REST API",
+        bookmarkId: "6c6b81b0-548f-4aa8-ab88-1aa74f0ac1ff",
+        conditionId: "62d7b450f87cd637bbc6f802",
+        triggerType: "RELOAD",
+        recipients: {
+          userIds: [
+            {
+              alertingTaskRecipientErrors: [],
+              enabled: true,
+              groups: null,
+              subscribed: true,
+              taskRecipientErrors: null,
+              value: "ownku6EUMs602y5xxDVYEQYj4RjwybLY",
+            },
+          ],
+        },
+      })
+      .catch((e) => {
+        let a = 1;
+      });
+
+    let a = 1;
   });
 });

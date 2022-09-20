@@ -44,12 +44,8 @@ describe("QSEoW (Session)", function () {
     const repo = new QlikRepositoryClient(this.localConfig);
 
     const tagOperations = new TagOperations(repo);
-    const {
-      newTagData,
-      getTagData,
-      deleteTagData,
-      updateTagData,
-    } = await tagOperations.run();
+    const { newTagData, getTagData, deleteTagData, updateTagData } =
+      await tagOperations.run();
 
     expect(newTagData.status).to.be.eq(201) &&
       expect(getTagData.status).to.be.eq(200) &&
@@ -65,10 +61,11 @@ describe("QSEoW (Session)", function () {
   it("Proxy (Session)", async function () {
     const util = new Util(false);
     let sessionConfig = { ...util.baseConfigSession };
-    (sessionConfig.authentication as ISessionConfig).sessionId = this.localConfig.authentication.sessionId;
+    (sessionConfig.authentication as ISessionConfig).sessionId =
+      this.localConfig.authentication.sessionId;
 
     const proxyClient = new QlikProxyClient(sessionConfig);
-    const userInfo = await proxyClient.Get("user");
+    const userInfo = await proxyClient.Get<{ logoutUri: string }>("user");
 
     expect(userInfo.status).to.be.eq(200) &&
       expect(userInfo.data.logoutUri).to.not.be.false;

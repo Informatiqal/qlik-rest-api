@@ -16,12 +16,8 @@ describe("QSEoW (Header)", function () {
     const repo = new QlikRepositoryClient(util.baseConfigHeader);
 
     const tagOperations = new TagOperations(repo);
-    const {
-      newTagData,
-      getTagData,
-      deleteTagData,
-      updateTagData,
-    } = await tagOperations.run();
+    const { newTagData, getTagData, deleteTagData, updateTagData } =
+      await tagOperations.run();
 
     expect(newTagData.status).to.be.eq(201) &&
       expect(getTagData.status).to.be.eq(200) &&
@@ -33,17 +29,19 @@ describe("QSEoW (Header)", function () {
 
   it("Engine (Header) - GET (Healthcheck)", async function () {
     let engine = new QlikEngineClient(util.baseConfigHeader);
-    let result = await engine.Get("engine/healthcheck");
+    let result = await engine.Get<{ version: string }>("engine/healthcheck");
 
     expect(result.status).to.be.eq(200) &&
-      expect(result.data.version).to.not.be.empty;
+      expect(result.data?.version).to.not.be.empty;
   });
 
   it("Generic (Header) - GET (Healthcheck)", async function () {
     let generic = new QlikGenericRestClient(util.baseConfigHeader);
-    let result = await generic.Get("api/engine/healthcheck");
+    let result = await generic.Get<{ version: string }>(
+      "api/engine/healthcheck"
+    );
 
     expect(result.status).to.be.eq(200) &&
-      expect(result.data.version).to.not.be.empty;
+      expect(result.data?.version).to.not.be.empty;
   });
 });

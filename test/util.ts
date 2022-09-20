@@ -69,7 +69,7 @@ export class Util {
 
   setConfig() {
     this.baseConfig = {
-      host: process.env.TEST_HOST,
+      host: `${process.env.TEST_HOST}`,
       port: 4242,
       httpsAgent: this.httpsAgentCert,
       authentication: {
@@ -79,7 +79,7 @@ export class Util {
     };
 
     this.baseConfig = {
-      host: process.env.TEST_HOST,
+      host: `${process.env.TEST_HOST}`,
       port: 4242,
       httpsAgent: this.httpsAgentCert,
       authentication: {
@@ -89,7 +89,7 @@ export class Util {
     };
 
     this.baseConfigPxf = {
-      host: process.env.TEST_HOST,
+      host: `${process.env.TEST_HOST}`,
       port: 4242,
       httpsAgent: this.httpsAgentPfx,
       authentication: {
@@ -99,41 +99,41 @@ export class Util {
     };
 
     this.baseConfigHeader = {
-      host: process.env.TEST_HOST,
+      host: `${process.env.TEST_HOST}`,
       proxy: process.env.AUTH_HEADER_PROXY,
       httpsAgent: this.httpsAgentSelfSigned,
       authentication: {
-        header: process.env.AUTH_HEADER,
-        user: process.env.AUTH_HEADER_USER,
+        header: `${process.env.AUTH_HEADER}`,
+        user: `${process.env.AUTH_HEADER_USER}`,
       },
     };
 
     this.baseConfigJWT = {
-      host: process.env.TEST_HOST,
+      host: `${process.env.TEST_HOST}`,
       proxy: process.env.AUTH_JWT_PROXY,
       httpsAgent: this.httpsAgentSelfSigned,
       authentication: {
-        token: process.env.AUTH_JWT_TOKEN,
+        token: `${process.env.AUTH_JWT_TOKEN}`,
       },
     };
 
     this.baseConfigJWTNoAgent = {
-      host: process.env.TEST_HOST,
+      host: `${process.env.TEST_HOST}`,
       proxy: process.env.AUTH_JWT_PROXY,
       authentication: {
-        token: process.env.AUTH_JWT_TOKEN,
+        token: `${process.env.AUTH_JWT_TOKEN}`,
       },
     };
 
     this.baseConfigSaas = {
-      host: process.env.SAAS_URL,
+      host: `${process.env.SAAS_URL}`,
       authentication: {
-        token: process.env.SAAS_TOKEN,
+        token: `${process.env.SAAS_TOKEN}`,
       },
     };
 
     this.baseConfigSession = {
-      host: process.env.TEST_HOST,
+      host: `${process.env.TEST_HOST}`,
       httpsAgent: this.httpsAgentSelfSigned,
       authentication: {
         sessionId: "",
@@ -142,7 +142,7 @@ export class Util {
     };
 
     this.baseConfigTicket = {
-      host: process.env.TEST_HOST,
+      host: `${process.env.TEST_HOST}`,
       httpsAgent: this.httpsAgentSelfSigned,
       authentication: {
         ticket: "",
@@ -178,23 +178,23 @@ export class TagOperations {
     };
   }
 
-  async newTag(): Promise<IHttpReturn> {
+  async newTag(): Promise<IHttpReturn<any>> {
     return await this.repoClient.Post(`tag`, {
       name: this.tagName,
     });
   }
 
-  private async getTagInfo(tagId: string): Promise<IHttpReturn> {
+  private async getTagInfo(tagId: string): Promise<IHttpReturn<any>> {
     return await this.repoClient.Get(`tag/full?filter=(id eq ${tagId})`);
   }
 
-  private async updateTag(tag: IHttpReturn): Promise<IHttpReturn> {
+  private async updateTag(tag: IHttpReturn<any>): Promise<IHttpReturn<any>> {
     let toUpdateInfo = { ...tag.data[0] };
     toUpdateInfo.name = this.tagNewName;
     return await this.repoClient.Put(`tag/${tag.data[0].id}`, toUpdateInfo);
   }
 
-  private async deleteTag(tagId: string): Promise<IHttpReturn> {
+  private async deleteTag(tagId: string): Promise<IHttpReturn<any>> {
     return await this.repoClient.Delete(`tag/${tagId}`);
   }
 }
