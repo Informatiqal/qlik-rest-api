@@ -46,7 +46,7 @@ describe("QSEoW (Certificates)", function () {
 
     expect(newSessionData.status).to.be.eq(201) &&
       expect(getSessionData.status).to.be.eq(200) &&
-      expect(getSessionData.data.id).to.be.undefined &&
+      expect(getSessionData.data.id).to.be.eq(undefined) &&
       expect(deleteSessionData.status).to.be.eq(200);
   });
 

@@ -108,12 +108,14 @@ export class MakeRequest {
             status: e.response.status,
             statusText: e.response.statusText,
             message: e.message,
+            data: "",
           };
 
         throw {
           status: undefined,
           statusText: undefined,
           message: e.message,
+          data: "",
         };
       }
     );
@@ -123,22 +125,24 @@ export class MakeRequest {
       function (e: AxiosError) {
         throw e;
       }
-      //   throw {
-      //     status: e.response.status,
-      //     statusText: e.response.statusText,
-      //     message: e.message,
-      //   };
-      // }
     );
 
-    this.SetHttpsAgent();
-    this.SetHeader();
-    this.SetJWT();
-    this.SetSession();
-    this.SetUserHeader();
-    this.SetTicket();
-    // this.SetAttributes();
-    // this.SetContext();
+    if (this.configFull.httpsAgent)
+      this.requestConfig.httpsAgent = this.configFull.httpsAgent;
+
+    if (this.configFull.authentication.hasOwnProperty("header"))
+      this.SetHeader();
+
+    if (this.configFull.authentication.hasOwnProperty("token")) this.SetJWT();
+
+    if (this.configFull.authentication.hasOwnProperty("sessionId"))
+      this.SetSession();
+
+    if (this.configFull.authentication.hasOwnProperty("user_name"))
+      this.SetUserHeader();
+
+    if (this.configFull.authentication.hasOwnProperty("ticket"))
+      this.SetTicket();
 
     this.xrfKey = generateXrfkey();
   }
@@ -174,7 +178,7 @@ export class MakeRequest {
       });
   }
 
-  async Get(): Promise<IHttpReturn> {
+  async Get<T>(): Promise<IHttpReturn<T>> {
     return await this.instance(this.requestConfig)
       .catch((e: AxiosError) => {
         throw new Error(e.message);
@@ -186,7 +190,7 @@ export class MakeRequest {
       }));
   }
 
-  async Delete(): Promise<IHttpReturn> {
+  async Delete(): Promise<IHttpReturn<string>> {
     this.requestConfig.method = "DELETE";
 
     return await this.instance(this.requestConfig)
@@ -197,12 +201,14 @@ export class MakeRequest {
         return {
           status: response.status,
           statusText: response.statusText,
-          data: response.data,
+          data: response.data ? `${response.data}` : "",
         };
       });
   }
 
-  async Patch(data: object | BinaryType | string | Blob): Promise<IHttpReturn> {
+  async Patch<T>(
+    data: object | BinaryType | string | Blob
+  ): Promise<IHttpReturn<T>> {
     this.requestConfig.method = "PATCH";
     this.requestConfig.data = data;
 
@@ -214,12 +220,14 @@ export class MakeRequest {
         return {
           status: response.status,
           statusText: response.statusText,
-          data: response.data,
+          data: response.data || {},
         };
       });
   }
 
-  async Post(data: object | BinaryType | string | Blob): Promise<IHttpReturn> {
+  async Post<T>(
+    data: object | BinaryType | string | Blob
+  ): Promise<IHttpReturn<T>> {
     this.requestConfig.method = "POST";
     this.requestConfig.data = data;
 
@@ -234,7 +242,9 @@ export class MakeRequest {
     );
   }
 
-  async Put(data: object | BinaryType | string | Blob): Promise<IHttpReturn> {
+  async Put<T>(
+    data: object | BinaryType | string | Blob
+  ): Promise<IHttpReturn<T>> {
     this.requestConfig.method = "PUT";
     this.requestConfig.data = data;
 
@@ -246,31 +256,22 @@ export class MakeRequest {
         return {
           status: response.status,
           statusText: response.statusText,
-          data: response.data,
+          data: response.data || {},
         };
       });
   }
 
-  private SetHttpsAgent() {
-    if (this.configFull.httpsAgent)
-      this.requestConfig.httpsAgent = this.configFull.httpsAgent;
-  }
-
+  // if header authentication
   private SetHeader() {
-    // if header authentication
-    if ((this.configFull.authentication as IHeaderConfig).header) {
-      let headerName = (this.configFull.authentication as IHeaderConfig).header;
-      let user = (this.configFull.authentication as IHeaderConfig).user;
-      this.requestConfig.headers[headerName] = user;
-    }
+    const headerName = (this.configFull.authentication as IHeaderConfig).header;
+    const user = (this.configFull.authentication as IHeaderConfig).user;
+    this.requestConfig.headers[headerName] = user;
   }
 
+  // if JWT authentication
   private SetJWT() {
-    // if JWT authentication
-    if ((this.configFull.authentication as IJWTConfig).token) {
-      let token = (this.configFull.authentication as IJWTConfig).token;
-      this.requestConfig.headers["Authorization"] = `Bearer ${token}`;
-    }
+    const token = (this.configFull.authentication as IJWTConfig).token;
+    this.requestConfig.headers["Authorization"] = `Bearer ${token}`;
 
     if ((this.configFull.authentication as ISaaSToken).webIntegrationId) {
       this.requestConfig.headers["qlik-web-integration-id"] = (
@@ -279,53 +280,28 @@ export class MakeRequest {
     }
   }
 
+  // if session authentication
   private SetSession() {
-    // if session authentication
-    if ((this.configFull.authentication as ISessionConfig).sessionId) {
-      let sessionId = (this.configFull.authentication as ISessionConfig)
-        .sessionId;
-      let cookieHeaderName = (this.configFull.authentication as ISessionConfig)
-        .cookieHeaderName;
-      this.requestConfig.headers["Cookie"] = `${cookieHeaderName}=${sessionId}`;
-    }
+    const sessionId = (this.configFull.authentication as ISessionConfig)
+      .sessionId;
+    const cookieHeaderName = (this.configFull.authentication as ISessionConfig)
+      .cookieHeaderName;
+    this.requestConfig.headers["Cookie"] = `${cookieHeaderName}=${sessionId}`;
   }
 
+  // set Qlik user header in the required format
   private SetUserHeader() {
-    // set Qlik user header in the required format
-    if ((this.configFull.authentication as any).user_name) {
-      this.requestConfig.headers["X-Qlik-User"] = generateQlikUserHeader(
-        this.configFull.authentication as ICertUser
-      );
-    }
+    this.requestConfig.headers["X-Qlik-User"] = generateQlikUserHeader(
+      this.configFull.authentication as ICertUser
+    );
   }
 
+  // set Qlik ticket
   private SetTicket() {
-    // set Qlik ticket
-    if ((this.configFull.authentication as ITicketConfig).ticket) {
-      let ticket: string = (this.configFull.authentication as ITicketConfig)
-        .ticket;
-      this.qlikTicket = ticket;
-    }
+    const ticket: string = (this.configFull.authentication as ITicketConfig)
+      .ticket;
+    this.qlikTicket = ticket;
   }
-
-  // private SetAttributes() {
-  //   if (this.configFull.authentication.attributes) {
-  //     if (!Array.isArray(this.configFull.authentication.attributes))
-  //       throw new Error(`Provided connection attributes are not an array`);
-
-  //     for (let attribute of this.configFull.authentication.attributes) {
-  //       Object.entries(attribute).map(([key, value]) => {
-  //         this.requestConfig.headers[key] = value;
-  //       });
-  //     }
-  //   }
-  // }
-
-  // private SetContext() {
-  //   if (this.configFull.context) {
-  //     this.requestConfig.headers["Context"] = this.configFull.context;
-  //   }
-  // }
 
   private async SaasPagingInterceptor(response: AxiosResponse) {
     let dataExtractComplete = false;
