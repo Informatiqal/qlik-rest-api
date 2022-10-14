@@ -38,11 +38,7 @@ export class MakeRequest {
     followLocation?: boolean,
     returnLocation?: boolean
   ) {
-    if (!configFull.host)
-      throw new Error(`Missing "host" property or it is empty`);
-
-    if (!configFull.authentication)
-      throw new Error(`Missing "authentication" property or it is empty`);
+    if (!configFull.host) throw new Error(`Missing or empty "host" property`);
 
     this.configFull = configFull;
     this.followLocation = followLocation || true;
@@ -130,18 +126,18 @@ export class MakeRequest {
     if (this.configFull.httpsAgent)
       this.requestConfig.httpsAgent = this.configFull.httpsAgent;
 
-    if (this.configFull.authentication.hasOwnProperty("header"))
+    if (this.configFull.authentication?.hasOwnProperty("header"))
       this.SetHeader();
 
-    if (this.configFull.authentication.hasOwnProperty("token")) this.SetJWT();
+    if (this.configFull.authentication?.hasOwnProperty("token")) this.SetJWT();
 
-    if (this.configFull.authentication.hasOwnProperty("sessionId"))
+    if (this.configFull.authentication?.hasOwnProperty("sessionId"))
       this.SetSession();
 
-    if (this.configFull.authentication.hasOwnProperty("user_name"))
+    if (this.configFull.authentication?.hasOwnProperty("user_name"))
       this.SetUserHeader();
 
-    if (this.configFull.authentication.hasOwnProperty("ticket"))
+    if (this.configFull.authentication?.hasOwnProperty("ticket"))
       this.SetTicket();
 
     this.xrfKey = generateXrfkey();
