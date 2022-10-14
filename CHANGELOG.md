@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.4.1 - 2022-09-20
+
+- [change] Allow configuration to be created without `authentication` property [#83](https://github.com/Informatiqal/qlik-rest-api/issues/83)
+
 ## 1.4.0 - 2022-09-20
 
 - For TS usage each method will require return type to be specified. The type will be passed to `IHttpReturn` type and then will be used for the returned `data` property [#81](https://github.com/Informatiqal/qlik-rest-api/issues/81)

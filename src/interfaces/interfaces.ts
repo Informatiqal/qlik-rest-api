@@ -1,8 +1,8 @@
 import { AxiosResponse } from "axios";
 
 export interface ICertUser {
-  user_dir?: string;
-  user_name?: string;
+  user_dir: string;
+  user_name: string;
 }
 
 export interface IHeaderConfig {
@@ -35,7 +35,7 @@ export interface IConfig {
   headers?: string[];
   httpsAgent?: any;
   saasVersion?: number;
-  authentication:
+  authentication?:
     | IHeaderConfig
     | IJWTConfig
     | ISessionConfig
