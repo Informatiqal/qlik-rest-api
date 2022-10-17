@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.4.2 - 2022-10-17
+
+- [fix] `POST` request returns the raw http error (if any)
+
 ## 1.4.1 - 2022-09-20
 
 - [change] Allow configuration to be created without `authentication` property [#83](https://github.com/Informatiqal/qlik-rest-api/issues/83)

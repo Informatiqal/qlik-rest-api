@@ -227,15 +227,17 @@ export class MakeRequest {
     this.requestConfig.method = "POST";
     this.requestConfig.data = data;
 
-    return await this.instance(this.requestConfig).then(
-      (response: AxiosResponse) => {
+    return await this.instance(this.requestConfig)
+      .catch((e: AxiosError) => {
+        throw new Error(e.message);
+      })
+      .then((response: AxiosResponse) => {
         return {
           status: response.status,
           statusText: response.statusText,
           data: response.data || {},
         };
-      }
-    );
+      });
   }
 
   async Put<T>(

@@ -44,4 +44,24 @@ describe("QSEoW (Header)", function () {
     expect(result.status).to.be.eq(200) &&
       expect(result.data?.version).to.not.be.empty;
   });
+
+  it("Raw http error", async function () {
+    const repo = new QlikRepositoryClient(util.baseConfigHeaderWrongURL);
+
+    const promises = [
+      repo.Get("tag").catch((e) => e.message),
+      repo.Post("tag", {}).catch((e) => e.message),
+      repo.Delete("tag").catch((e) => e.message),
+      repo.Put("tag", {}).catch((e) => e.message),
+      repo.Patch("tag", {}).catch((e) => e.message),
+    ];
+
+    const result: string[] = await Promise.all(promises);
+
+    expect(result[0].indexOf("ENOTFOUND")).to.be.greaterThan(-1) &&
+      expect(result[1].indexOf("ENOTFOUND")).to.be.greaterThan(-1) &&
+      expect(result[2].indexOf("ENOTFOUND")).to.be.greaterThan(-1) &&
+      expect(result[3].indexOf("ENOTFOUND")).to.be.greaterThan(-1) &&
+      expect(result[4].indexOf("ENOTFOUND")).to.be.greaterThan(-1);
+  });
 });

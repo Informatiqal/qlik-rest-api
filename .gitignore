@@ -8,3 +8,4 @@ index.doc.ts
 .npmrc
 mochawesome-report/
 .vscode/settings.json
+playground.spec.ts
