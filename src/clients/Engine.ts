@@ -5,9 +5,12 @@ export class QlikEngineClient extends QlikClient {
   constructor(config: IConfig) {
     const { proxy, protocol, port } = urlComponents(config);
 
-    super({
-      ...config,
-      baseUrl: `${protocol}://${config.host}${port}${proxy}/api`,
-    });
+    super(
+      {
+        ...config,
+        baseUrl: `${protocol}://${config.host}${port}${proxy}/api`,
+      },
+      "win"
+    );
   }
 }

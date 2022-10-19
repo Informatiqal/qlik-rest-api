@@ -11,6 +11,6 @@ export class QlikSaaSClient extends QlikClient {
       baseUrl: `${protocol}://${config.host}/api/v${saasVersion}`,
     };
 
-    super(configFull);
+    super(configFull, "saas");
   }
 }
