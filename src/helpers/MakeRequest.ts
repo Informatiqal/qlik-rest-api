@@ -141,27 +141,24 @@ export class MakeRequest {
       );
     }
 
-    if (this.edition == "win") {
-      if (this.configFull.httpsAgent)
-        this.requestConfig.httpsAgent = this.configFull.httpsAgent;
+    if (this.configFull.httpsAgent)
+      this.requestConfig.httpsAgent = this.configFull.httpsAgent;
 
-      if (this.configFull.authentication?.hasOwnProperty("header"))
-        this.SetHeader();
+    if (this.configFull.authentication?.hasOwnProperty("header"))
+      this.SetHeader();
 
-      if (this.configFull.authentication?.hasOwnProperty("token"))
-        this.SetJWT();
+    if (this.configFull.authentication?.hasOwnProperty("token")) this.SetJWT();
 
-      if (this.configFull.authentication?.hasOwnProperty("sessionId"))
-        this.SetSession();
+    if (this.configFull.authentication?.hasOwnProperty("sessionId"))
+      this.SetSession();
 
-      if (this.configFull.authentication?.hasOwnProperty("user_name"))
-        this.SetUserHeader();
+    if (this.configFull.authentication?.hasOwnProperty("user_name"))
+      this.SetUserHeader();
 
-      if (this.configFull.authentication?.hasOwnProperty("ticket"))
-        this.SetTicket();
+    if (this.configFull.authentication?.hasOwnProperty("ticket"))
+      this.SetTicket();
 
-      this.xrfKey = generateXrfkey();
-    }
+    this.xrfKey = generateXrfkey();
   }
 
   PrepareRequestConfig(
