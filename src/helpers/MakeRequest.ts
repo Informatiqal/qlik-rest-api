@@ -308,12 +308,11 @@ export class MakeRequest {
 
     // SaaS returns an empty response with DELETE method
     if (response.data == "") return response;
-
+    if (response.data == null) return response;
     if (!response.data) return undefined;
 
     if (response.data && response.data.data) returnData = response.data.data;
     if (response.data && !response.data.data) returnData = response.data;
-
     if (response.data && !response.data.links) return resp;
 
     while (dataExtractComplete == false) {

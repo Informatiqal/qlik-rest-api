@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.4.3 - 2022-10-18
+
+- [fix] for some requests Qlik returns `null` but the request status was success. This was threated as an empty data response and `undefined` was returned. Now if the data is `null` then the original response will be returned.
+
 ## 1.4.2 - 2022-10-17
 
 - [fix] `POST` request returns the raw http error (if any)
