@@ -57,6 +57,18 @@ export class MakeRequest {
     this.instance = instance;
     this.instance.interceptors.response.use(
       async function (response: AxiosResponse) {
+        // Qlik SaaS have rate limits
+        // whenever the rate limit is reached the response will be
+        // with status 429 and retry-after header should be available
+        if (response.status == 429) {
+          const retryAfter =
+            (response.headers["retry-after"] as unknown as number) || -1;
+          const retryAfterMessage =
+            retryAfter > -1 ? ` Retry after ${retryAfter} second(s)` : "";
+
+          throw new Error(`Rate limit reached.${retryAfterMessage}`);
+        }
+
         if (!response.headers.location) return response;
 
         if (response.headers.location && followLocation) {
