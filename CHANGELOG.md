@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.5.0 - 2022-10-19
+
+- internal - do not include SaaS specific response codebase when calling QSEoW (and vice-versa) [#95](https://github.com/Informatiqal/qlik-rest-api/issues/95)
+
 ## 1.4.4 - 2022-10-19
 
 - [add] error will be thrown if the response is with status 429 (rate limit reached). Ideally only applicable only to SaaS

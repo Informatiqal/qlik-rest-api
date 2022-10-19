@@ -23,6 +23,7 @@ import {
   setURLXrfKey,
   setQlikTicket,
 } from "../helpers/generic";
+import { Edition } from "../clients/BaseClient";
 
 export class MakeRequest {
   configFull: IConfigFull;
@@ -32,15 +33,18 @@ export class MakeRequest {
   instance: AxiosInstance;
   private followLocation: boolean;
   private returnLocation: boolean;
+  private edition: Edition;
 
   constructor(
     configFull: IConfigFull,
+    edition: Edition,
     followLocation?: boolean,
     returnLocation?: boolean
   ) {
     if (!configFull.host) throw new Error(`Missing or empty "host" property`);
 
     this.configFull = configFull;
+    this.edition = edition;
     this.followLocation = followLocation || true;
     this.returnLocation = returnLocation || false;
 
@@ -128,12 +132,14 @@ export class MakeRequest {
       }
     );
 
-    this.instance.interceptors.response.use(
-      this.SaasPagingInterceptor,
-      function (e: AxiosError) {
-        throw e;
-      }
-    );
+    if (this.edition == "saas") {
+      this.instance.interceptors.response.use(
+        this.SaasPagingInterceptor,
+        function (e: AxiosError) {
+          throw e;
+        }
+      );
+    }
 
     if (this.configFull.httpsAgent)
       this.requestConfig.httpsAgent = this.configFull.httpsAgent;

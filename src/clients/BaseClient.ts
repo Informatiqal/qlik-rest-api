@@ -2,11 +2,15 @@ import { IConfigFull, IHttpReturn } from "../interfaces/interfaces";
 import { MakeRequest } from "../helpers/MakeRequest";
 import { ResponseType } from "axios";
 
+export type Edition = "saas" | "win";
+
 export abstract class QlikClient {
   configFull: IConfigFull;
+  private edition: Edition;
 
-  constructor(configFull: IConfigFull) {
+  constructor(configFull: IConfigFull, edition: Edition) {
     this.configFull = configFull;
+    this.edition = edition;
   }
 
   async Get<T>(
@@ -14,7 +18,7 @@ export abstract class QlikClient {
     contentType?: string,
     responseType?: ResponseType
   ): Promise<IHttpReturn<T>> {
-    const request = new MakeRequest(this.configFull);
+    const request = new MakeRequest(this.configFull, this.edition);
     request.PrepareRequestConfig(
       `${this.configFull.baseUrl}/${path}`,
       contentType,
@@ -28,7 +32,7 @@ export abstract class QlikClient {
     contentType?: string,
     responseType?: ResponseType
   ): Promise<IHttpReturn<string>> {
-    const request = new MakeRequest(this.configFull);
+    const request = new MakeRequest(this.configFull, this.edition);
     request.PrepareRequestConfig(
       `${this.configFull.baseUrl}/${path}`,
       contentType,
@@ -44,7 +48,7 @@ export abstract class QlikClient {
     additionalHeaders?: { name: string; value: any }[],
     responseType?: ResponseType
   ): Promise<IHttpReturn<T>> {
-    const request = new MakeRequest(this.configFull);
+    const request = new MakeRequest(this.configFull, this.edition);
     request.PrepareRequestConfig(
       `${this.configFull.baseUrl}/${path}`,
       contentType,
@@ -65,6 +69,7 @@ export abstract class QlikClient {
   ): Promise<IHttpReturn<T>> {
     const request = new MakeRequest(
       this.configFull,
+      this.edition,
       followLocation,
       returnLocation
     );
@@ -83,7 +88,7 @@ export abstract class QlikClient {
     contentType = "application/json",
     responseType?: ResponseType
   ): Promise<IHttpReturn<T>> {
-    const request = new MakeRequest(this.configFull);
+    const request = new MakeRequest(this.configFull, this.edition);
     request.PrepareRequestConfig(
       `${this.configFull.baseUrl}/${path}`,
       contentType,
