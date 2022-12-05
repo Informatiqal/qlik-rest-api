@@ -23,10 +23,12 @@ export class Util {
   public baseConfigPxf: IConfig;
   public baseConfigHeader: IConfig;
   public baseConfigJWT: IConfig;
+  public baseConfigNoAuthentication: IConfig;
   public baseConfigJWTNoAgent: IConfig;
   public baseConfigSession: IConfig;
   public baseConfigTicket: IConfig;
   public baseConfigSaas: IConfig;
+  public baseConfigHeaderWrongURL: IConfig;
 
   constructor(loadCertificates?: boolean) {
     this.loadCertificates = loadCertificates || false;
@@ -73,8 +75,8 @@ export class Util {
       port: 4242,
       httpsAgent: this.httpsAgentCert,
       authentication: {
-        user_dir: process.env.SENSE_USER_DIRECTORY,
-        user_name: process.env.SENSE_USER_NAME,
+        user_dir: `${process.env.SENSE_USER_DIRECTORY}`,
+        user_name: `${process.env.SENSE_USER_NAME}`,
       },
     };
 
@@ -83,8 +85,8 @@ export class Util {
       port: 4242,
       httpsAgent: this.httpsAgentCert,
       authentication: {
-        user_dir: process.env.SENSE_USER_DIRECTORY,
-        user_name: process.env.SENSE_USER_NAME,
+        user_dir: `${process.env.SENSE_USER_DIRECTORY}`,
+        user_name: `${process.env.SENSE_USER_NAME}`,
       },
     };
 
@@ -93,13 +95,23 @@ export class Util {
       port: 4242,
       httpsAgent: this.httpsAgentPfx,
       authentication: {
-        user_dir: process.env.SENSE_USER_DIRECTORY,
-        user_name: process.env.SENSE_USER_NAME,
+        user_dir: `${process.env.SENSE_USER_DIRECTORY}`,
+        user_name: `${process.env.SENSE_USER_NAME}`,
       },
     };
 
     this.baseConfigHeader = {
       host: `${process.env.TEST_HOST}`,
+      proxy: process.env.AUTH_HEADER_PROXY,
+      httpsAgent: this.httpsAgentSelfSigned,
+      authentication: {
+        header: `${process.env.AUTH_HEADER}`,
+        user: `${process.env.AUTH_HEADER_USER}`,
+      },
+    };
+
+    this.baseConfigHeaderWrongURL = {
+      host: `${process.env.TEST_HOST_WRONG}`,
       proxy: process.env.AUTH_HEADER_PROXY,
       httpsAgent: this.httpsAgentSelfSigned,
       authentication: {
@@ -115,6 +127,11 @@ export class Util {
       authentication: {
         token: `${process.env.AUTH_JWT_TOKEN}`,
       },
+    };
+
+    this.baseConfigNoAuthentication = {
+      host: `${process.env.TEST_HOST}`,
+      httpsAgent: this.httpsAgentSelfSigned,
     };
 
     this.baseConfigJWTNoAgent = {
@@ -185,6 +202,7 @@ export class TagOperations {
   }
 
   private async getTagInfo(tagId: string): Promise<IHttpReturn<any>> {
+    let a = 1;
     return await this.repoClient.Get(`tag/full?filter=(id eq ${tagId})`);
   }
 

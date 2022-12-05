@@ -1,6 +1,6 @@
 {
   "name": "qlik-rest-api",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Interact with multiple Qlik Sense REST APIs",
   "author": {
     "email": "info@informatiqal.com",
@@ -41,20 +41,20 @@
   },
   "devDependencies": {
     "@types/axios": "0.14.0",
-    "@types/chai": "4.3.3",
-    "@types/mocha": "10.0.0",
-    "@types/node": "18.11.2",
-    "chai": "4.3.6",
+    "@types/chai": "4.3.4",
+    "@types/mocha": "10.0.1",
+    "@types/node": "18.11.10",
+    "chai": "4.3.7",
     "dotenv": "16.0.3",
     "mocha": "10.1.0",
     "nyc": "15.1.0",
-    "prettier": "2.7.1",
+    "prettier": "2.8.0",
     "rollup": "2.79.1",
     "rollup-plugin-delete": "2.0.0",
     "rollup-plugin-terser": "7.0.2",
     "rollup-plugin-typescript2": "0.34.1",
     "ts-node": "10.9.1",
-    "typedoc": "0.23.17",
+    "typedoc": "0.23.21",
     "typescript": "4.7.4"
   },
   "prettier": {
