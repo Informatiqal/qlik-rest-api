@@ -1,13 +1,12 @@
 {
     "compilerOptions": {
         "outDir": "./dist",
-        "target": "ES5",
-        "esModuleInterop": true,
+        "target": "ES6",
         "declaration": true,
-        "declarationDir": "./dist",
-        "module": "es6",
-        "noImplicitAny": true,
-        "moduleResolution": "Node"
+        "module": "ES2020",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "moduleResolution": "node"
     },
     "include": [
         "src/**/*"
