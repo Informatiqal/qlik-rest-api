@@ -27,6 +27,9 @@ Interact with Qlik Sense REST APIs (Repository, Proxy, Engine and SaaS) from a s
 
 `npm install --save qlik-rest-api`
 
+> **Note**
+> Node version >= 16.0.0
+
 ## Return data format
 
 All requests are returning data in the following format:
