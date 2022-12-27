@@ -1,4 +1,5 @@
-import chai from "chai";
+import * as chai from "chai";
+import "mocha";
 import {
   Util,
   TagOperations,

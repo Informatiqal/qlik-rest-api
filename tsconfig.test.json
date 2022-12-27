@@ -1,14 +1,15 @@
 {
     "compilerOptions": {
         "outDir": "./dist",
-        "target": "ES5",
+        "target": "ESNext",
         "declaration": true,
         "declarationDir": "./dist",
-        "module": "CommonJS",
+        "module": "ESNext",
         "noImplicitAny": false,
         "sourceMap": true,
         "moduleResolution": "node",
         "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true
     },
     "include": [
         "src/**/*"

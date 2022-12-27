@@ -13,10 +13,11 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "engines": {
-    "node": ">=8"
+    "node": ">=16.0.0"
   },
+  "engineStrict": true,
   "scripts": {
-    "test": "set TS_NODE_PROJECT=tsconfig.test.json&mocha --require ts-node/register test/**/*.spec.ts --ignore test/playground.spec.ts",
+    "test": "set TS_NODE_PROJECT=tsconfig.test.json&mocha --require ts-node/register test/**/*.spec.ts --loader=ts-node/esm --no-warnings=ExperimentalWarning --experimental-specifier-resolution=node --ignore test/playground.spec.ts",
     "test-badge": "set TS_NODE_PROJECT=tsconfig.test.json&mocha --reporter mocha-badge-generator --reporter-options=badge_format=png,badge_output=badge.png --require ts-node/register test/**/*.spec.ts",
     "docs": "npx typedoc src/index.doc.ts --name \"Qlik REST API\" --excludePrivate --hideGenerator --darkHighlightTheme dark-plus",
     "build-tsc": "tsc",
@@ -48,6 +49,7 @@
     "@types/node": "18.11.18",
     "chai": "4.3.7",
     "dotenv": "16.0.3",
+    "esm": "^3.2.25",
     "mocha": "10.2.0",
     "nyc": "15.1.0",
     "prettier": "2.8.1",

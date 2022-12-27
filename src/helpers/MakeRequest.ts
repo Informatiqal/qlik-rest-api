@@ -220,9 +220,7 @@ export class MakeRequest {
       });
   }
 
-  async Patch<T>(
-    data: object | BinaryType | string | Blob
-  ): Promise<IHttpReturn<T>> {
+  async Patch<T>(data: object | string | Blob): Promise<IHttpReturn<T>> {
     this.requestConfig.method = "PATCH";
     this.requestConfig.data = data;
 
@@ -239,9 +237,7 @@ export class MakeRequest {
       });
   }
 
-  async Post<T>(
-    data: object | BinaryType | string | Blob
-  ): Promise<IHttpReturn<T>> {
+  async Post<T>(data: object | string | Blob): Promise<IHttpReturn<T>> {
     this.requestConfig.method = "POST";
     this.requestConfig.data = data;
 
@@ -258,9 +254,7 @@ export class MakeRequest {
       });
   }
 
-  async Put<T>(
-    data: object | BinaryType | string | Blob
-  ): Promise<IHttpReturn<T>> {
+  async Put<T>(data: object | string | Blob): Promise<IHttpReturn<T>> {
     this.requestConfig.method = "PUT";
     this.requestConfig.data = data;
 

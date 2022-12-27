@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.6.1 - 2022-12-27
+
+- all dependencies are up-to-date
+
 ## 1.6.0 - 2022-12-05
 
 - Qlik SaaS OAuth authentication (machine-to-machine) workflow - authenticate with `client_id` and `client_secret` [#102](https://github.com/Informatiqal/qlik-rest-api/issues/102)
