@@ -1,9 +1,9 @@
-import { IConfig } from "../interfaces/interfaces";
+import { IConfig, IContext } from "../interfaces/interfaces";
 import { QlikClient } from "./BaseClient";
 import { urlComponents } from "../helpers/generic";
 
 export class QlikRepositoryClient extends QlikClient {
-  constructor(config: IConfig) {
+  constructor(config: IConfig, context?: IContext) {
     const { proxy, protocol, port } = urlComponents(config);
 
     super(
@@ -11,7 +11,8 @@ export class QlikRepositoryClient extends QlikClient {
         ...config,
         baseUrl: `${protocol}://${config.host}${port}${proxy}/qrs`,
       },
-      "win"
+      "win",
+      context || "qmc"
     );
   }
 }
