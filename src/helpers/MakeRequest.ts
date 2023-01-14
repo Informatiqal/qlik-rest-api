@@ -7,6 +7,7 @@ import {
   IHttpReturn,
   ICertUser,
   ISaaSToken,
+  IContext,
 } from "../interfaces/interfaces";
 
 import axios, {
@@ -165,7 +166,8 @@ export class MakeRequest {
     url: string,
     contentType = "application/json",
     responseType?: ResponseType,
-    additionalHeaders?: { name: string; value: any }[]
+    additionalHeaders?: { name: string; value: any }[],
+    context?: IContext
   ): void {
     this.requestConfig.url = setQlikTicket(url, this.qlikTicket);
     if (this.requestConfig.url.indexOf("api/v1/") == -1) {
@@ -190,6 +192,16 @@ export class MakeRequest {
           );
         }
       });
+
+    if (context) {
+      if (context != "hub" && context != "qmc")
+        throw new Error(
+          `Unknown context values. Allowed values are "hub" and "qmc". Provided was "${context}"`
+        );
+
+      this.requestConfig.headers["X-Qlik-Security"] =
+        context == "hub" ? "Context=AppAccess" : "Context=ManagementAccess";
+    }
   }
 
   async Get<T>(): Promise<IHttpReturn<T>> {

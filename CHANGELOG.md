@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.7.0 - 2023-01-13
+
+- optional context parameter for Repository client - `hub` or `qmc`. By default the calls will be made as if the user is accessing the data from QMC. If `hub` is specified then the point of view will be the Hub. The context is passed to Qlik and is used in security rules application
+
 ## 1.6.1 - 2022-12-27
 
 - all dependencies are up-to-date

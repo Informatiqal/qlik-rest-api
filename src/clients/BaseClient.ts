@@ -1,5 +1,6 @@
 import {
   IConfigFull,
+  IContext,
   IHttpReturn,
   IOauthTokenResponse,
   ISaaSErrorResponse,
@@ -14,10 +15,12 @@ export abstract class QlikClient {
   configFull: IConfigFull;
   private edition: Edition;
   private tokenExpirationDate: Date;
+  private context: IContext;
 
-  constructor(configFull: IConfigFull, edition: Edition) {
+  constructor(configFull: IConfigFull, edition: Edition, context?: IContext) {
     this.configFull = configFull;
     this.edition = edition;
+    this.context = context;
   }
 
   async Get<T>(
@@ -31,7 +34,9 @@ export abstract class QlikClient {
     request.PrepareRequestConfig(
       `${this.configFull.baseUrl}/${path}`,
       contentType,
-      responseType
+      responseType,
+      undefined,
+      this.context
     );
     return await request.Get<T>();
   }
@@ -47,7 +52,9 @@ export abstract class QlikClient {
     request.PrepareRequestConfig(
       `${this.configFull.baseUrl}/${path}`,
       contentType,
-      responseType
+      responseType,
+      undefined,
+      this.context
     );
     return await request.Delete();
   }
@@ -66,7 +73,8 @@ export abstract class QlikClient {
       `${this.configFull.baseUrl}/${path}`,
       contentType,
       responseType,
-      additionalHeaders || []
+      additionalHeaders || [],
+      this.context
     );
     return await request.Patch(data);
   }
@@ -92,7 +100,8 @@ export abstract class QlikClient {
       `${this.configFull.baseUrl}/${path}`,
       contentType,
       responseType,
-      additionalHeaders || []
+      additionalHeaders || [],
+      this.context
     );
     return await request.Post(data);
   }
@@ -109,7 +118,9 @@ export abstract class QlikClient {
     request.PrepareRequestConfig(
       `${this.configFull.baseUrl}/${path}`,
       contentType,
-      responseType
+      responseType,
+      undefined,
+      this.context
     );
     return await request.Put(data);
   }

@@ -1,5 +1,7 @@
 import { AxiosResponse } from "axios";
 
+export type IContext = "qmc" | "hub";
+
 export interface ICertUser {
   user_dir: string;
   user_name: string;
