@@ -212,7 +212,7 @@ export class MakeRequest {
       .then((response: AxiosResponse) => ({
         status: response.status,
         statusText: response.statusText,
-        data: response.data.data ? response.data.data : response.data,
+        data: response.data || response.data,
       }));
   }
 
@@ -328,7 +328,7 @@ export class MakeRequest {
   private async SaasPagingInterceptor(response: AxiosResponse) {
     let dataExtractComplete = false;
     let returnData: any = [];
-    let resp = response;
+    let resp = { ...response };
 
     // SaaS returns an empty response with DELETE method
     if (response.data == "") return response;
@@ -388,7 +388,7 @@ export class MakeRequest {
       delete resp.data.links;
     }
 
-    resp.data.data = returnData;
+    // resp.data.data = returnData;
 
     return resp;
   }
