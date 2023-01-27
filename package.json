@@ -26,7 +26,8 @@
   },
   "files": [
     "dist/**/*",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "!dist/index.doc.d.ts"
   ],
   "funding": {
     "type": "kofi",
