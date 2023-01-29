@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.7.2 - 2023-01-29
+
+- fixed issue when data is returned under `data.data` property instead of `data`
+
 ## 1.7.1 - 2023-01-27
 
 - sometimes the SaaS requests will be returned with data object being repeated over and over again

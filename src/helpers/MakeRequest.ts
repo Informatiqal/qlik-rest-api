@@ -212,7 +212,7 @@ export class MakeRequest {
       .then((response: AxiosResponse) => ({
         status: response.status,
         statusText: response.statusText,
-        data: response.data || response.data,
+        data: response.data.data || response.data,
       }));
   }
 

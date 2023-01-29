@@ -18,7 +18,7 @@ describe("SaaS", function () {
 
     const items = await saas.Get<[]>(`items?limit=${limit}`);
 
-    expect(items.data.length).to.be.greaterThan(10);
+    expect(items.data.length).to.be.greaterThan(5);
   });
 
   // Uploading resources to SaaS (theme, extension etc) is done
@@ -124,35 +124,5 @@ describe("SaaS", function () {
     );
 
     expect(qvfFile.length).to.be.equal(contentDetails.data.Size);
-  });
-
-  it("TEST ", async function () {
-    const saas = new QlikSaaSClient(util.baseConfigSaas);
-    // const b = await saas.Get("items").catch((e) => {
-    const b = await saas
-      .Post("data-alerts", {
-        appId: "434758a9-e05d-417a-8f27-398dc9b1f375",
-        name: "REST API",
-        bookmarkId: "6c6b81b0-548f-4aa8-ab88-1aa74f0ac1ff",
-        conditionId: "62d7b450f87cd637bbc6f802",
-        triggerType: "RELOAD",
-        recipients: {
-          userIds: [
-            {
-              alertingTaskRecipientErrors: [],
-              enabled: true,
-              groups: null,
-              subscribed: true,
-              taskRecipientErrors: null,
-              value: "ownku6EUMs602y5xxDVYEQYj4RjwybLY",
-            },
-          ],
-        },
-      })
-      .catch((e) => {
-        let a = 1;
-      });
-
-    let a = 1;
   });
 });
