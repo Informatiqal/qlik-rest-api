@@ -6,7 +6,8 @@
         "module": "ES6",
         "noImplicitAny": false,
         "sourceMap": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true
     },
     "include": [
         "src/**/*"

@@ -38,11 +38,32 @@ export interface ISaaSOauthM2M {
 }
 
 export interface IConfig {
+  /**
+   * Qlik Sense host (name, ip etc.)
+   */
   host: string;
+  /**
+   * Port number
+   *
+   * List of all ports:
+   *
+   * https://help.qlik.com/en-US/sense-admin/February2023/Subsystems/DeployAdministerQSE/Content/Sense_DeployAdminister/QSEoW/Deploy_QSEoW/Ports.htm
+   */
   port?: number;
+  /**
+   * Virtual proxy prefix
+   */
   proxy?: string;
   notSecure?: boolean;
+  /**
+   * Additional http headers to be send
+   */
   headers?: string[];
+  /**
+   * Optional https agent (useful in Node.js environment)
+   *
+   * Ignore certificate issues, provide certificates etc
+   */
   httpsAgent?: any;
   saasVersion?: number;
   authentication?:

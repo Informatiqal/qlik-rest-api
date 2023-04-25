@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.7.4 - 2023-04-25
+
+- throw error when port is not provided in the config for GenericRestClient
+- dependency updates
+
 ## 1.7.2 - 2023-01-29
 
 - fixed issue when data is returned under `data.data` property instead of `data`

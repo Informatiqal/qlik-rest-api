@@ -13,7 +13,7 @@ import {
 describe("QSEoW (Header)", function () {
   this.timeout(30000);
   it("Repository (Header) - DELETE, GET, POST and PUT (Tag)", async function () {
-    const repo = new QlikRepositoryClient(util.baseConfigHeader);
+    const repo = new QlikRepositoryClient({ ...util.baseConfigHeader });
 
     const tagOperations = new TagOperations(repo);
     const { newTagData, getTagData, deleteTagData, updateTagData } =
@@ -28,7 +28,7 @@ describe("QSEoW (Header)", function () {
   });
 
   it("Engine (Header) - GET (Healthcheck)", async function () {
-    let engine = new QlikEngineClient(util.baseConfigHeader);
+    let engine = new QlikEngineClient({ ...util.baseConfigHeader, port: 443 });
     let result = await engine.Get<{ version: string }>("engine/healthcheck");
 
     expect(result.status).to.be.eq(200) &&
@@ -36,7 +36,10 @@ describe("QSEoW (Header)", function () {
   });
 
   it("Generic (Header) - GET (Healthcheck)", async function () {
-    let generic = new QlikGenericRestClient(util.baseConfigHeader);
+    let generic = new QlikGenericRestClient({
+      ...util.baseConfigHeader,
+      port: 443,
+    });
     let result = await generic.Get<{ version: string }>(
       "api/engine/healthcheck"
     );
