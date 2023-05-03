@@ -39,7 +39,7 @@ All requests are returning data in the following format:
     data:  {} or []    // whatever is returned (including the error(s) details if error)
     status: number     // HTTP status codes: 200, 201, 204, 404, 409 etc.
     statusText: string // HTTP status text: "OK", "Created", "Bad Request" etc.
-    message: string    // optional. In cese of an error this prop will be the raw message
+    message: string    // optional. In case of an error this prop will be the raw message
 }
 ```
 
