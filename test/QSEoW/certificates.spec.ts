@@ -11,6 +11,7 @@ const expect = chai.expect;
 const util = new Util(true);
 
 import {
+  QlikGenericRestClient,
   // QlikEngineClient,
   // QlikGenericRestClient,
   QlikProxyClient,
@@ -69,6 +70,18 @@ describe("QSEoW (Certificates)", function () {
       "app/hublist?filter=name eq 'Operations Monitor'"
     );
 
+    //TODO: proper expect here
     expect(true).to.be.true;
+  });
+
+  it("Generic client with base path", async function () {
+    const config = { ...util.baseConfig };
+    config.port = 9098;
+
+    const odag = new QlikGenericRestClient(config, "v1");
+
+    const odagAboutResponse = await odag.Get<{}>("about").then((d) => d.data);
+
+    expect(odagAboutResponse.hasOwnProperty("apiVersion")).to.be.true;
   });
 });

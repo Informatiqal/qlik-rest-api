@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.7.5 - 2023-05-03
+
+- `QlikGenericRestClient` accepts optional `basePath` parameter [#172](https://github.com/Informatiqal/qlik-rest-api/issues/172)
+
 ## 1.7.4 - 2023-04-25
 
 - throw error when port is not provided in the config for GenericRestClient
