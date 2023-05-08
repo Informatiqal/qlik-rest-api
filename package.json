@@ -58,7 +58,7 @@
     "rollup-plugin-delete": "2.0.0",
     "ts-node": "10.9.1",
     "tslib": "^2.5.0",
-    "typedoc": "0.24.6",
+    "typedoc": "0.24.7",
     "typescript": "5.0.4"
   },
   "prettier": {
