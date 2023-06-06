@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.7.6 - 2023-06-06
+
+- `Post` and `Path` methods "accept" `ReadStream` alongside with `Buffer`
+
 ## 1.7.5 - 2023-05-03
 
 - `QlikGenericRestClient` accepts optional `basePath` parameter [#172](https://github.com/Informatiqal/qlik-rest-api/issues/172)

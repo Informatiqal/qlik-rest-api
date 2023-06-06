@@ -8,6 +8,7 @@ import {
 } from "../interfaces/interfaces";
 import { MakeRequest } from "../helpers/MakeRequest";
 import axios, { AxiosError, ResponseType } from "axios";
+import { ReadStream } from "fs";
 
 export type Edition = "saas" | "win";
 
@@ -61,7 +62,7 @@ export abstract class QlikClient {
 
   async Patch<T>(
     path: string,
-    data: object | BinaryType | string | Blob,
+    data: object | BinaryType | string | Blob | ReadStream,
     contentType = "application/json",
     additionalHeaders?: { name: string; value: any }[],
     responseType?: ResponseType
@@ -81,7 +82,7 @@ export abstract class QlikClient {
 
   async Post<T>(
     path: string,
-    data: Object | BinaryType,
+    data: Object | BinaryType | ReadStream,
     contentType = "application/json",
     responseType?: ResponseType,
     followLocation?: boolean,
