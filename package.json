@@ -54,7 +54,7 @@
     "mocha": "10.2.0",
     "nyc": "15.1.0",
     "prettier": "2.8.8",
-    "rollup": "3.25.0",
+    "rollup": "3.25.1",
     "rollup-plugin-delete": "2.0.0",
     "ts-node": "10.9.1",
     "tslib": "^2.5.3",
