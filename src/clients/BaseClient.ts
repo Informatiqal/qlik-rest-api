@@ -9,11 +9,28 @@ import {
 import { MakeRequest } from "../helpers/MakeRequest";
 import axios, { AxiosError, ResponseType } from "axios";
 import { ReadStream } from "fs";
+import { TypedEventEmitter } from "../helpers/EventBus";
 
 export type Edition = "saas" | "win";
 
+type LocalEventTypes = {
+  download: [
+    arg1: {
+      url: string;
+      progress: number;
+    }
+  ];
+  upload: [
+    arg1: {
+      url: string;
+      progress: number;
+    }
+  ];
+};
+
 export abstract class QlikClient {
   configFull: IConfigFull;
+  emitter: TypedEventEmitter<LocalEventTypes>;
   private edition: Edition;
   private tokenExpirationDate: Date;
   private context: IContext;
@@ -22,6 +39,7 @@ export abstract class QlikClient {
     this.configFull = configFull;
     this.edition = edition;
     this.context = context;
+    this.emitter = new TypedEventEmitter<LocalEventTypes>();
   }
 
   async Get<T>(
@@ -32,6 +50,11 @@ export abstract class QlikClient {
     await this.SaaSTokenM2M();
 
     const request = new MakeRequest(this.configFull, this.edition);
+    request.requestConfig.onDownloadProgress = (progress) =>
+      this.emitData("download", progress, request.requestConfig.url);
+    request.requestConfig.onUploadProgress = (progress) =>
+      this.emitData("upload", progress, request.requestConfig.url);
+
     request.PrepareRequestConfig(
       `${this.configFull.baseUrl}/${path}`,
       contentType,
@@ -198,5 +221,12 @@ export abstract class QlikClient {
         token: tokenData.access_token,
       };
     }
+  }
+
+  private emitData(eventType: "download" | "upload", progressEvent, url) {
+    this.emitter.emit(eventType, {
+      url: url,
+      progress: Math.floor(100 * (progressEvent.loaded / progressEvent.total)),
+    });
   }
 }
