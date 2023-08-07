@@ -1,16 +1,13 @@
-import chai from "chai";
+import { describe, it, expect } from "vitest";
 import { Util } from "../util";
 import fs from "fs";
 import { QlikFormData } from "../../src/helpers/FormData";
 
-const expect = chai.expect;
 const util = new Util();
 
 import { QlikSaaSClient } from "../../src/index";
 
 describe("SaaS", function () {
-  this.timeout(30000);
-
   // Test retrieving paginated data by applying limit parameter
   it("Get, limit and paginate data", async function () {
     const saas = new QlikSaaSClient(util.baseConfigSaas);
@@ -35,18 +32,24 @@ describe("SaaS", function () {
 
     const theme = fs.readFileSync(<string>process.env.THEME_PATH);
     const fd = new QlikFormData();
-    fd.append(
-      "data",
-      JSON.stringify({
+    fd.append({
+      field: "data",
+      data: JSON.stringify({
         tags: [],
-      })
-    );
-    fd.append("file", theme, "casual.zip");
+      }),
+    });
+
+    fd.append({
+      field: "file",
+      data: theme,
+      fileName: "casual.zip",
+      contentType: "application/x-zip-compressed",
+    });
 
     const newTheme = await saas.Post<{ id: string }>(
       `themes`,
       fd.getData,
-      fd.getHeaders
+      fd.getHeaders,
     );
 
     const deleteNewTheme = await saas.Delete(`themes/${newTheme.data.id}`);
@@ -72,14 +75,14 @@ describe("SaaS", function () {
         attributes: {
           name: "TEST App (updated)",
         },
-      }
+      },
     );
 
     const deleteApp = await saas.Delete(`apps/${newApp.data.attributes.id}`);
 
     expect(newApp.data.attributes).to.have.property("id") &&
       expect(updateAppName.data.attributes.name).to.be.equal(
-        "TEST App (updated)"
+        "TEST App (updated)",
       ) &&
       expect(deleteApp.status).to.be.equal(200);
   });
@@ -115,12 +118,12 @@ describe("SaaS", function () {
           name: "Upload-Metadata",
           value: `filename ${appNameEncoded}, ttl 10000`,
         },
-      ]
+      ],
     );
 
     // get the temp file details
     const contentDetails = await saas.Get<{ Size: number }>(
-      `temp-contents/${tempContentLocation.data.id}/details`
+      `temp-contents/${tempContentLocation.data.id}/details`,
     );
 
     expect(qvfFile.length).to.be.equal(contentDetails.data.Size);

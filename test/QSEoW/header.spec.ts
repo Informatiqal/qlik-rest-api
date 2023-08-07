@@ -1,7 +1,6 @@
-import chai from "chai";
+import { describe, it, expect } from "vitest";
 import { Util, TagOperations } from "../../test/util";
 
-const expect = chai.expect;
 const util = new Util();
 
 import {
@@ -11,7 +10,6 @@ import {
 } from "../../src/index";
 
 describe("QSEoW (Header)", function () {
-  this.timeout(30000);
   it("Repository (Header) - DELETE, GET, POST and PUT (Tag)", async function () {
     const repo = new QlikRepositoryClient({ ...util.baseConfigHeader });
 
@@ -41,7 +39,7 @@ describe("QSEoW (Header)", function () {
       port: 443,
     });
     let result = await generic.Get<{ version: string }>(
-      "api/engine/healthcheck"
+      "api/engine/healthcheck",
     );
 
     expect(result.status).to.be.eq(200) &&
