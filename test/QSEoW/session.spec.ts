@@ -1,13 +1,11 @@
-import chai from "chai";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { Util, TagOperations, ProxySessionOperation } from "../../test/util";
 import { QlikProxyClient, QlikRepositoryClient } from "../../src/index";
 import { ISessionConfig } from "../../src/interfaces/interfaces";
 
-const expect = chai.expect;
 const globalUtil = new Util(true);
 
 describe("QSEoW (Session)", function () {
-  this.timeout(30000);
   // before each test create proxy session
   beforeEach(async function () {
     let localProxyConfig = { ...globalUtil.baseConfig };
@@ -32,7 +30,7 @@ describe("QSEoW (Session)", function () {
   // after each test delete the session and null the manually set values
   afterEach(async function () {
     await this.proxyOperations.deleteSession(
-      this.localConfig.authentication.sessionId
+      this.localConfig.authentication.sessionId,
     );
 
     this.proxyClient = undefined;

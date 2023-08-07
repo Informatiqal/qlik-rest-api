@@ -1,14 +1,12 @@
-import chai from "chai";
-import { Util, TagOperations } from "../../test/util";
+import { describe, it, expect } from "vitest";
+import { Util } from "../../test/util";
 
-const expect = chai.expect;
 const util = new Util(true);
 
 import { QlikRepositoryClient, QlikProxyClient } from "../../src/index";
 import { ITicketConfig } from "../../src/interfaces/interfaces";
 
 describe("QSEoW (Ticket)", function () {
-  this.timeout(30000);
   it("Repository (Ticket) - DELETE, GET, POST and PUT (About)", async function () {
     let localBaseConfig = { ...util.baseConfig };
     localBaseConfig.port = 4243;
