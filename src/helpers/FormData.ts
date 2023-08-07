@@ -38,27 +38,57 @@ export class QlikFormData {
     return this.headers;
   }
 
-  /**
-   *
-   * @param field type of the field
-   * @param data the actual data for the field
-   * @param fileName name of the file
-   */
-  append(field: "data" | "file", data: any, fileName?: string) {
+  append(
+    arg:
+      | {
+          /**
+           * Name of the field
+           */
+          field: string;
+          /**
+           * The actual data that is being uploaded
+           */
+          data: any;
+          contentType?: undefined;
+          fileName?: undefined;
+        }
+      | {
+          field: string;
+          data: any;
+          /**
+           * The content type (mime) of the file being uploaded. For example:
+           *
+           * - application/x-zip-compressed
+           * - image/png
+           * - image/jpeg
+           * - image/x-icon
+           * - text/css
+           */
+          contentType: string;
+          /**
+           * Name of the file that is being uploaded
+           */
+          fileName?: string;
+        },
+  ) {
+    if (!arg) throw new Error(`FormData: arguments are missing`);
+    if (!arg.data) throw new Error(`FormData: "data" parameter is missing`);
+    if (!arg.field) throw new Error(`FormData: "field" parameter is missing`);
+    if (arg.fileName && !arg.contentType)
+      throw new Error(`FormData: content type (mime) is missing`);
+
     // remove the last entry if appending more than one
     this.streams.pop();
 
-    if (field == "data")
-      this.streams.push(
-        `--${this.boundary}\r\nContent-Disposition: form-data; name="data"\r\n\r\n`
-      );
+    let extras = `name="${arg.field}";`;
+    if (arg.fileName) extras += ` filename="${arg.fileName}"`;
+    if (arg.contentType) extras += `\r\nContent-Type: ${arg.contentType}`;
 
-    if (field == "file")
-      this.streams.push(
-        `--${this.boundary}\r\nContent-Disposition: form-data; name="file"; filename="${fileName}"\r\nContent-Type: application/x-zip-compressed\r\n\r\n`
-      );
+    this.streams.push(
+      `--${this.boundary}\r\nContent-Disposition: form-data; ${extras}\r\n\r\n`,
+    );
 
-    this.streams.push(data);
+    this.streams.push(arg.data);
 
     this.data = this.getFormData();
   }
