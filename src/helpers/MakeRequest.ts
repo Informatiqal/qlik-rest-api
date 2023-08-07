@@ -252,6 +252,8 @@ export class MakeRequest {
   async Post<T>(data: object | string | Blob): Promise<IHttpReturn<T>> {
     this.requestConfig.method = "POST";
     this.requestConfig.data = data;
+    this.requestConfig.maxBodyLength = Infinity;
+    this.requestConfig.maxContentLength = Infinity;
 
     return await this.instance(this.requestConfig)
       .catch((e: AxiosError) => {

@@ -1,5 +1,4 @@
-import * as chai from "chai";
-import "mocha";
+import { describe, it, expect } from "vitest";
 import {
   Util,
   TagOperations,
@@ -7,7 +6,6 @@ import {
   // EngineOperations,
 } from "../../test/util";
 
-const expect = chai.expect;
 const util = new Util(true);
 
 import {
@@ -20,7 +18,6 @@ import {
 // import { IHeaderConfig } from "../../src/interfaces/interfaces";
 
 describe("QSEoW (Certificates)", function () {
-  this.timeout(30000);
   it("Repository (Certificates) - DELETE, GET, POST and PUT (Tag)", async function () {
     const repo = new QlikRepositoryClient(util.baseConfig);
 
@@ -67,7 +64,7 @@ describe("QSEoW (Certificates)", function () {
   it("Engine (Certificates) - GET (Healthcheck)", async function () {
     const repo = new QlikRepositoryClient(util.baseConfig);
     const opsMonitorApps = await repo.Get(
-      "app/hublist?filter=name eq 'Operations Monitor'"
+      "app/hublist?filter=name eq 'Operations Monitor'",
     );
 
     //TODO: proper expect here

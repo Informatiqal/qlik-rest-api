@@ -1,23 +1,17 @@
-import chai from "chai";
+import { describe, it, expect } from "vitest";
 import { Util, TagOperations } from "../../test/util";
 
-const expect = chai.expect;
 const util = new Util();
 
 import { QlikRepositoryClient } from "../../src/index";
 
 describe("QSEoW (JWT)", function () {
-  this.timeout(30000);
   it("Repository (JWT) - DELETE, GET, POST and PUT (Tag)", async function () {
     const repo = new QlikRepositoryClient(util.baseConfigJWT);
 
     const tagOperations = new TagOperations(repo);
-    const {
-      newTagData,
-      getTagData,
-      deleteTagData,
-      updateTagData,
-    } = await tagOperations.run();
+    const { newTagData, getTagData, deleteTagData, updateTagData } =
+      await tagOperations.run();
 
     expect(newTagData.status).to.be.eq(201) &&
       expect(getTagData.status).to.be.eq(200) &&
