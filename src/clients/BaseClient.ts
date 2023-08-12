@@ -13,18 +13,18 @@ import { TypedEventEmitter } from "../helpers/EventBus";
 
 export type Edition = "saas" | "win";
 
-type LocalEventTypes = {
+export type LocalEventTypes = {
   download: [
     arg1: {
       url: string;
       progress: number;
-    }
+    },
   ];
   upload: [
     arg1: {
       url: string;
       progress: number;
-    }
+    },
   ];
 };
 
@@ -45,7 +45,7 @@ export abstract class QlikClient {
   async Get<T>(
     path: string,
     contentType?: string,
-    responseType?: ResponseType
+    responseType?: ResponseType,
   ): Promise<IHttpReturn<T>> {
     await this.SaaSTokenM2M();
 
@@ -60,7 +60,7 @@ export abstract class QlikClient {
       contentType,
       responseType,
       undefined,
-      this.context
+      this.context,
     );
     return await request.Get<T>();
   }
@@ -68,7 +68,7 @@ export abstract class QlikClient {
   async Delete(
     path: string,
     contentType?: string,
-    responseType?: ResponseType
+    responseType?: ResponseType,
   ): Promise<IHttpReturn<string>> {
     await this.SaaSTokenM2M();
 
@@ -78,7 +78,7 @@ export abstract class QlikClient {
       contentType,
       responseType,
       undefined,
-      this.context
+      this.context,
     );
     return await request.Delete();
   }
@@ -88,7 +88,7 @@ export abstract class QlikClient {
     data: object | BinaryType | string | Blob | ReadStream,
     contentType = "application/json",
     additionalHeaders?: { name: string; value: any }[],
-    responseType?: ResponseType
+    responseType?: ResponseType,
   ): Promise<IHttpReturn<T>> {
     await this.SaaSTokenM2M();
 
@@ -98,7 +98,7 @@ export abstract class QlikClient {
       contentType,
       responseType,
       additionalHeaders || [],
-      this.context
+      this.context,
     );
     return await request.Patch(data);
   }
@@ -110,7 +110,7 @@ export abstract class QlikClient {
     responseType?: ResponseType,
     followLocation?: boolean,
     returnLocation?: boolean,
-    additionalHeaders?: { name: string; value: any }[]
+    additionalHeaders?: { name: string; value: any }[],
   ): Promise<IHttpReturn<T>> {
     await this.SaaSTokenM2M();
 
@@ -118,14 +118,14 @@ export abstract class QlikClient {
       this.configFull,
       this.edition,
       followLocation,
-      returnLocation
+      returnLocation,
     );
     request.PrepareRequestConfig(
       `${this.configFull.baseUrl}/${path}`,
       contentType,
       responseType,
       additionalHeaders || [],
-      this.context
+      this.context,
     );
     return await request.Post(data);
   }
@@ -134,7 +134,7 @@ export abstract class QlikClient {
     path: string,
     data: Object,
     contentType = "application/json",
-    responseType?: ResponseType
+    responseType?: ResponseType,
   ): Promise<IHttpReturn<T>> {
     await this.SaaSTokenM2M();
 
@@ -144,7 +144,7 @@ export abstract class QlikClient {
       contentType,
       responseType,
       undefined,
-      this.context
+      this.context,
     );
     return await request.Put(data);
   }
@@ -181,7 +181,7 @@ export abstract class QlikClient {
               "content-type": "application/json",
               accept: "application/json",
             },
-          }
+          },
         )
         .then((res) => res.data as IOauthTokenResponse)
         .catch((e: AxiosError<{ errors: ISaaSErrorResponse[] }>) => {
@@ -191,7 +191,7 @@ export abstract class QlikClient {
             throw new Error(
               `${e.message}: ${e.response.data.errors
                 .map((e) => `${e.title} -> ${e.detail}`)
-                .join("\n")}`
+                .join("\n")}`,
             );
           }
 
@@ -211,7 +211,7 @@ export abstract class QlikClient {
 
       if (!tokenData.expires_at && !tokenData.access_token)
         throw new Error(
-          `"access_token" and "expires_at" are missing from the response`
+          `"access_token" and "expires_at" are missing from the response`,
         );
 
       this.tokenExpirationDate = new Date(tokenData.expires_at);
