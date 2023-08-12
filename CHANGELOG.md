@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.8.0 - 2023-08-12
+
+- SaaS errors will now include the SaaS errors description from the response (if any)
+- `QlikFormData` is now exported
+- ability to provide content type/mime when using `QlikFormData` module
+- tests are `vitest` based (`mocha` and `chai` are not used anymore)
+
 ## 1.7.6 - 2023-06-06
 
 - `Post` and `Path` methods "accept" `ReadStream` alongside with `Buffer`
