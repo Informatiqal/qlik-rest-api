@@ -26,6 +26,17 @@ import {
 } from "../helpers/generic";
 import { Edition } from "../clients/BaseClient";
 
+export interface ISaaSError {
+  code: string;
+  status: string;
+  title: string;
+}
+
+export interface ISaaSErrorData {
+  errors: ISaaSError[];
+  traceId: string;
+}
+
 export class MakeRequest {
   configFull: IConfigFull;
   requestConfig: AxiosRequestConfig;
@@ -40,7 +51,7 @@ export class MakeRequest {
     configFull: IConfigFull,
     edition: Edition,
     followLocation?: boolean,
-    returnLocation?: boolean
+    returnLocation?: boolean,
   ) {
     if (!configFull.host) throw new Error(`Missing or empty "host" property`);
 
@@ -107,6 +118,21 @@ export class MakeRequest {
       },
 
       function (e: AxiosError) {
+        if (e.response && (e.response.data as ISaaSErrorData).errors) {
+          throw {
+            status: e.response.status,
+            statusText: e.response.statusText,
+            message: `${e.message}. Error(s): ${(
+              e.response.data as ISaaSErrorData
+            ).errors
+              .map((err) => `${err.title} (${err.code})`)
+              .join(";")}; TraceId: ${
+              (e.response.data as ISaaSErrorData).traceId
+            }`,
+            data: e.response.data,
+          };
+        }
+
         if (e.response && e.response.data) {
           throw {
             status: e.response.status,
@@ -130,7 +156,7 @@ export class MakeRequest {
           message: e.message,
           data: "",
         };
-      }
+      },
     );
 
     if (this.edition == "saas") {
@@ -138,7 +164,7 @@ export class MakeRequest {
         this.SaasPagingInterceptor,
         function (e: AxiosError) {
           throw e;
-        }
+        },
       );
     }
 
@@ -167,14 +193,14 @@ export class MakeRequest {
     contentType = "application/json",
     responseType?: ResponseType,
     additionalHeaders?: { name: string; value: any }[],
-    context?: IContext
+    context?: IContext,
   ): void {
     this.requestConfig.url = setQlikTicket(url, this.qlikTicket);
     if (this.requestConfig.url.indexOf("api/v1/") == -1) {
       this.requestConfig.headers["X-Qlik-Xrfkey"] = this.xrfKey;
       this.requestConfig.url = setURLXrfKey(
         this.requestConfig.url,
-        this.xrfKey
+        this.xrfKey,
       );
     } else {
       delete this.requestConfig.headers["X-Qlik-Xrfkey"];
@@ -188,7 +214,7 @@ export class MakeRequest {
           this.requestConfig.headers[header.name] = header.value;
         } catch (e) {
           throw new Error(
-            `Unable to add header "${header.name}" with value "${header.value}" to the request`
+            `Unable to add header "${header.name}" with value "${header.value}" to the request`,
           );
         }
       });
@@ -196,7 +222,7 @@ export class MakeRequest {
     if (context) {
       if (context != "hub" && context != "qmc")
         throw new Error(
-          `Unknown context values. Allowed values are "hub" and "qmc". Provided was "${context}"`
+          `Unknown context values. Allowed values are "hub" and "qmc". Provided was "${context}"`,
         );
 
       this.requestConfig.headers["X-Qlik-Security"] =
@@ -316,7 +342,7 @@ export class MakeRequest {
   // set Qlik user header in the required format
   private SetUserHeader() {
     this.requestConfig.headers["X-Qlik-User"] = generateQlikUserHeader(
-      this.configFull.authentication as ICertUser
+      this.configFull.authentication as ICertUser,
     );
   }
 
