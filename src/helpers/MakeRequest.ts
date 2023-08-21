@@ -394,7 +394,7 @@ export class MakeRequest {
         let nextPageUrl = resp.data.links.next.href
           ? resp.data.links.next.href
           : resp.data.links.Next.Href;
-
+        5;
         let nextPageConf = { ...resp.config };
         nextPageConf.url = nextPageUrl;
         await axios(nextPageConf).then((r: AxiosResponse) => {
@@ -408,15 +408,12 @@ export class MakeRequest {
       }
     }
 
-    if (!resp.data) {
-      resp.data = {};
-    }
+    if (!resp.data) resp.data = {};
 
-    if (resp.data.links) {
-      delete resp.data.links;
-    }
+    if (resp.data.links) delete resp.data.links;
 
     // resp.data.data = returnData;
+    resp.data.data ? (resp.data.data = returnData) : (resp.data = returnData);
 
     return resp;
   }

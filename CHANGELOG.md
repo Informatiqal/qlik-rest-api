@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.8.1 - 2023-08-21
+
+- [#216](https://github.com/Informatiqal/qlik-rest-api/issues/216) correctly return all pages data instead of only data from the last page
+
 ## 1.8.0 - 2023-08-12
 
 - SaaS errors will now include the SaaS errors description from the response (if any)
