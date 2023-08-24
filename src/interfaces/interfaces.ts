@@ -74,6 +74,13 @@ export interface IConfig {
     | ICertUser
     | ISaaSToken
     | ISaaSOauthM2M;
+  options?: {
+    saas?: {
+      apps?: {
+        swapResourceIdAndId?: boolean;
+      };
+    };
+  };
 }
 
 export interface IConfigFull extends IConfig {
