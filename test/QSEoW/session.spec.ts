@@ -5,45 +5,45 @@ import { ISessionConfig } from "../../src/interfaces/interfaces";
 
 const globalUtil = new Util(true);
 
+let localConfig;
+let proxyOperations;
+let proxyClient;
+
 describe("QSEoW (Session)", function () {
   // before each test create proxy session
   beforeEach(async function () {
     let localProxyConfig = { ...globalUtil.baseConfig };
     localProxyConfig.port = 4243;
 
-    const proxyClient = new QlikProxyClient(localProxyConfig);
-    const proxyOperations = new ProxySessionOperation(proxyClient);
-    const sessionId = await proxyOperations
-      .createSession()
-      .then((sessionDetails) => sessionDetails.data.SessionId);
+    const proxyClientTemp = new QlikProxyClient(localProxyConfig);
+    const proxyOperationsTemp = new ProxySessionOperation(proxyClientTemp);
+    const sessionId = await proxyOperationsTemp.createSession().then((sessionDetails) => sessionDetails.data.SessionId);
 
     const localUtil = new Util(false);
-    let localConfig = { ...localUtil.baseConfigSession };
+    let localConfigTemp = { ...localUtil.baseConfigSession };
 
-    (localConfig.authentication as ISessionConfig).sessionId = sessionId;
+    (localConfigTemp.authentication as ISessionConfig).sessionId = sessionId;
 
-    this.localConfig = localConfig;
-    this.proxyOperations = proxyOperations;
-    this.proxyClient = proxyClient;
+    localConfig = localConfigTemp;
+    proxyOperations = proxyOperationsTemp;
+    proxyClient = proxyClientTemp;
   });
 
   // after each test delete the session and null the manually set values
   afterEach(async function () {
-    await this.proxyOperations.deleteSession(
-      this.localConfig.authentication.sessionId,
-    );
+    await proxyOperations.deleteSession(localConfig.authentication.sessionId);
 
-    this.proxyClient = undefined;
-    this.proxyOperations = undefined;
-    this.localConfig = undefined;
+    proxyClient = undefined;
+    proxyOperations = undefined;
+    localConfig = undefined;
   });
 
   it("Repository (Session) - DELETE, GET, POST and PUT (Tag)", async function () {
-    const repo = new QlikRepositoryClient(this.localConfig);
+    let a = 1;
+    const repo = new QlikRepositoryClient(localConfig);
 
     const tagOperations = new TagOperations(repo);
-    const { newTagData, getTagData, deleteTagData, updateTagData } =
-      await tagOperations.run();
+    const { newTagData, getTagData, deleteTagData, updateTagData } = await tagOperations.run();
 
     expect(newTagData.status).to.be.eq(201) &&
       expect(getTagData.status).to.be.eq(200) &&
@@ -59,13 +59,11 @@ describe("QSEoW (Session)", function () {
   it("Proxy (Session)", async function () {
     const util = new Util(false);
     let sessionConfig = { ...util.baseConfigSession };
-    (sessionConfig.authentication as ISessionConfig).sessionId =
-      this.localConfig.authentication.sessionId;
+    (sessionConfig.authentication as ISessionConfig).sessionId = localConfig.authentication.sessionId;
 
     const proxyClient = new QlikProxyClient(sessionConfig);
     const userInfo = await proxyClient.Get<{ logoutUri: string }>("user");
 
-    expect(userInfo.status).to.be.eq(200) &&
-      expect(userInfo.data.logoutUri).to.not.be.false;
+    expect(userInfo.status).to.be.eq(200) && expect(userInfo.data.logoutUri).to.not.be.false;
   });
 });

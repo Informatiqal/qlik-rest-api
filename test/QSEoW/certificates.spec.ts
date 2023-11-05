@@ -22,8 +22,7 @@ describe("QSEoW (Certificates)", function () {
     const repo = new QlikRepositoryClient(util.baseConfig);
 
     const tagOperations = new TagOperations(repo);
-    const { newTagData, getTagData, deleteTagData, updateTagData } =
-      await tagOperations.run();
+    const { newTagData, getTagData, deleteTagData, updateTagData } = await tagOperations.run();
 
     expect(newTagData.status).to.be.eq(201) &&
       expect(getTagData.status).to.be.eq(200) &&
@@ -40,8 +39,7 @@ describe("QSEoW (Certificates)", function () {
     const proxy = new QlikProxyClient(localConfig);
 
     const proxyOperations = new ProxySessionOperation(proxy);
-    const { newSessionData, deleteSessionData, getSessionData } =
-      await proxyOperations.run();
+    const { newSessionData, deleteSessionData, getSessionData } = await proxyOperations.run();
 
     expect(newSessionData.status).to.be.eq(201) &&
       expect(getSessionData.status).to.be.eq(200) &&
@@ -63,9 +61,7 @@ describe("QSEoW (Certificates)", function () {
 
   it("Engine (Certificates) - GET (Healthcheck)", async function () {
     const repo = new QlikRepositoryClient(util.baseConfig);
-    const opsMonitorApps = await repo.Get(
-      "app/hublist?filter=name eq 'Operations Monitor'",
-    );
+    const opsMonitorApps = await repo.Get("app/hublist?filter=name eq 'Operations Monitor'");
 
     //TODO: proper expect here
     expect(true).to.be.true;

@@ -82,15 +82,15 @@ export class Util {
       },
     };
 
-    this.baseConfig = {
-      host: `${process.env.TEST_HOST}`,
-      port: 4242,
-      httpsAgent: this.httpsAgentCert,
-      authentication: {
-        user_dir: `${process.env.SENSE_USER_DIRECTORY}`,
-        user_name: `${process.env.SENSE_USER_NAME}`,
-      },
-    };
+    // this.baseConfig = {
+    //   host: `${process.env.TEST_HOST}`,
+    //   port: 4242,
+    //   httpsAgent: this.httpsAgentCert,
+    //   authentication: {
+    //     user_dir: `${process.env.SENSE_USER_DIRECTORY}`,
+    //     user_name: `${process.env.SENSE_USER_NAME}`,
+    //   },
+    // };
 
     this.baseConfigPxf = {
       host: `${process.env.TEST_HOST}`,
@@ -124,6 +124,7 @@ export class Util {
 
     this.baseConfigJWT = {
       host: `${process.env.TEST_HOST}`,
+      port: 443,
       proxy: process.env.AUTH_JWT_PROXY,
       httpsAgent: this.httpsAgentSelfSigned,
       authentication: {
@@ -138,6 +139,7 @@ export class Util {
 
     this.baseConfigJWTNoAgent = {
       host: `${process.env.TEST_HOST}`,
+      port: 443,
       proxy: process.env.AUTH_JWT_PROXY,
       authentication: {
         token: `${process.env.AUTH_JWT_TOKEN}`,
@@ -148,6 +150,13 @@ export class Util {
       host: `${process.env.SAAS_URL}`,
       authentication: {
         token: `${process.env.SAAS_TOKEN}`,
+      },
+      options: {
+        saas: {
+          apps: {
+            swapResourceIdAndId: true,
+          },
+        },
       },
     };
 
@@ -229,9 +238,7 @@ export class ProxySessionOperation {
   async run() {
     let newSessionData = await this.createSession();
     let getSessionData = await this.getSession(newSessionData.data.SessionId);
-    let deleteSessionData = await this.deleteSession(
-      newSessionData.data.SessionId
-    );
+    let deleteSessionData = await this.deleteSession(newSessionData.data.SessionId);
 
     return {
       newSessionData,
