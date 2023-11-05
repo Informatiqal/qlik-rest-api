@@ -17,8 +17,7 @@
   },
   "engineStrict": true,
   "scripts": {
-    "test": "set TS_NODE_PROJECT=tsconfig.test.json&mocha --require ts-node/register test/**/*.spec.ts --loader=ts-node/esm --no-warnings=ExperimentalWarning --experimental-specifier-resolution=node --ignore test/playground.spec.ts",
-    "test-badge": "set TS_NODE_PROJECT=tsconfig.test.json&mocha --reporter mocha-badge-generator --reporter-options=badge_format=png,badge_output=badge.png --require ts-node/register test/**/*.spec.ts",
+    "test": "vitest run",
     "docs": "npx typedoc src/index.doc.ts --name \"Qlik REST API\" --excludePrivate --hideGenerator --darkHighlightTheme dark-plus",
     "build-tsc": "tsc",
     "build": "rollup -c",
