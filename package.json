@@ -48,7 +48,7 @@
     "dotenv": "16.3.1",
     "esm": "^3.2.25",
     "nyc": "15.1.0",
-    "rollup": "4.3.0",
+    "rollup": "4.13.1",
     "rollup-plugin-delete": "2.0.0",
     "ts-node": "10.9.1",
     "tslib": "^2.6.2",
