@@ -50,7 +50,7 @@
     "esm": "^3.2.25",
     "nyc": "17.0.0",
     "rollup": "4.21.0",
-    "rollup-plugin-delete": "^1.2.0",
+    "rollup-plugin-delete": "^2.0.0",
     "ts-node": "10.9.2",
     "tslib": "^2.6.3",
     "typedoc": "0.26.6",
