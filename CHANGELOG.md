@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.8.4 - 2024-08-22
+
+- dependency updates
+
+## 1.8.3 - 2023-11-23
+
+- dependency updates
+
 ## 1.8.2 - 2023-08-24
 
 - [#218](https://github.com/Informatiqal/qlik-rest-api/issues/218) allow passing additional config options. At the moment the only needed option is `swapResourceIdAndId` for SaaS `apps` entity. If needed more options can be added in the future. This is just a type change and no core code changes were made.
