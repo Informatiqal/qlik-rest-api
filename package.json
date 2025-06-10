@@ -44,7 +44,7 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/axios": "0.14.0",
-    "@types/node": "22.5.0",
+    "@types/node": "22.15.31",
     "axios": "^1.7.4",
     "dotenv": "16.4.5",
     "esm": "^3.2.25",
