@@ -15,6 +15,8 @@ import {
   QlikProxyClient,
   QlikRepositoryClient,
 } from "../../src/index";
+import { IncomingMessage } from "http";
+import { createWriteStream } from "fs";
 // import { IHeaderConfig } from "../../src/interfaces/interfaces";
 
 describe("QSEoW (Certificates)", function () {
@@ -76,5 +78,69 @@ describe("QSEoW (Certificates)", function () {
     const odagAboutResponse = await odag.Get<{}>("about").then((d) => d.data);
 
     expect(odagAboutResponse.hasOwnProperty("apiVersion")).to.be.true;
+  });
+
+  it("TEMP", async function () {
+    const repo = new QlikRepositoryClient(util.baseConfig);
+    const gen = new QlikGenericRestClient(util.baseConfig);
+
+    const token = "e4a7cde6-81de-440f-9dee-8895478a0f21";
+
+    const props = {
+      token: "",
+      skipData: false,
+    };
+
+    if (!props.token) props.token = token;
+
+    const downloadPath: string = await repo
+      .Post<{ downloadPath: string }>(`app/cd67fad4-8caa-457d-bbb6-472737025e6a/export/${props.token}`, {})
+      .then((response) => response.data)
+      .then((data) => data.downloadPath.replace("/tempcontent", "tempcontent"));
+
+    return await gen.Get<IncomingMessage>(downloadPath, "", "stream").then(async (r) => {
+      let a = 1;
+
+      await new Promise((resolve, reject) => {
+        const fileWriteStream = createWriteStream("d:/dev/blah/test.qvf");
+
+        (r.data as IncomingMessage).pipe(fileWriteStream).on("finish", resolve).on("error", reject);
+      });
+
+      return {
+        file: r.data,
+        exportToken: props.token ?? token,
+        id: `some-id`,
+        name: `test.qvf`,
+      };
+    });
+  });
+
+  it("TEMP1", async function () {
+    const repo = new QlikRepositoryClient(util.baseConfig);
+    const downloadPath: string = await repo
+      .Post<any>(`tag/table`, {
+        entity: "tag",
+        columns: [
+          {
+            columnType: "Property",
+            definition: "id",
+            name: "id",
+          },
+          {
+            columnType: "Function",
+            definition:
+              "Count(EngineService,PrintingService,ProxyService,VirtualProxyConfig,RepositoryService,SchedulerService,ServerNodeConfiguration,App,App.Object,ReloadTask,ExternalProgramTask,UserSyncTask,SystemRule,Stream,User,UserDirectory,DataConnection,Extension,ContentLibrary)",
+            name: "occurrences",
+          },
+        ],
+      })
+      .then((response) => {
+        let a = 1;
+        return response.data;
+      })
+      .catch((e) => {
+        let a = 1;
+      });
   });
 });

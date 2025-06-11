@@ -9,7 +9,8 @@ import https from "https";
 import { generateUUID } from "../src/helpers/generic";
 
 import { IConfig, IHttpReturn } from "../src/interfaces/interfaces";
-import { QlikRepositoryClient } from "../src";
+// import { QlikRepositoryClient } from "../src";
+import { QlikRepositoryClient } from "../dist";
 
 export class Util {
   private crt: Buffer;

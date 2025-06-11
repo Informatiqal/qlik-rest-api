@@ -2,8 +2,6 @@
 
 Interact with Qlik Sense REST APIs (Repository, Proxy, Engine and SaaS) from a single package (NodeJS/JavaScript)
 
-![mocha](https://badges.aleen42.com/src/mocha.svg) ![tests](./test/badge.png)
-
 ## Not affiliated with Qlik
 
 ## Please check the [Wiki section](https://github.com/Informatiqal/qlik-rest-api/wiki) for details and examples

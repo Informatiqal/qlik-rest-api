@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.8.5 - 2025-06-11
+
+- dependency updates
+
 ## 1.8.4 - 2024-08-22
 
 - dependency updates
