@@ -26,7 +26,7 @@ describe("SaaS", function () {
     const themes = await saas.Get<{ name: string; id: string }[]>(`themes`);
 
     // If the theme already exists - remove it
-    const themeExists = themes.data.filter((t) => t.name == "Casual");
+    const themeExists = themes.data.filter((t) => t.name == "Bubblegum");
     if (themeExists.length > 0)
       await saas.Delete(`themes/${themeExists[0].id}`);
 
@@ -42,14 +42,14 @@ describe("SaaS", function () {
     fd.append({
       field: "file",
       data: theme,
-      fileName: "casual.zip",
+      fileName: "Bubblegum.zip",
       contentType: "application/x-zip-compressed",
     });
 
     const newTheme = await saas.Post<{ id: string }>(
       `themes`,
       fd.getData,
-      fd.getHeaders,
+      fd.getHeaders
     );
 
     const deleteNewTheme = await saas.Delete(`themes/${newTheme.data.id}`);
@@ -75,14 +75,14 @@ describe("SaaS", function () {
         attributes: {
           name: "TEST App (updated)",
         },
-      },
+      }
     );
 
     const deleteApp = await saas.Delete(`apps/${newApp.data.attributes.id}`);
 
     expect(newApp.data.attributes).to.have.property("id") &&
       expect(updateAppName.data.attributes.name).to.be.equal(
-        "TEST App (updated)",
+        "TEST App (updated)"
       ) &&
       expect(deleteApp.status).to.be.equal(200);
   });
@@ -118,12 +118,12 @@ describe("SaaS", function () {
           name: "Upload-Metadata",
           value: `filename ${appNameEncoded}, ttl 10000`,
         },
-      ],
+      ]
     );
 
     // get the temp file details
     const contentDetails = await saas.Get<{ Size: number }>(
-      `temp-contents/${tempContentLocation.data.id}/details`,
+      `temp-contents/${tempContentLocation.data.id}/details`
     );
 
     expect(qvfFile.length).to.be.equal(contentDetails.data.Size);

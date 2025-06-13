@@ -51,6 +51,7 @@ export class Util {
 
       this.httpsAgentSelfSigned = new https.Agent({
         rejectUnauthorized: false,
+        keepAlive: false,
       });
 
       return true;
@@ -149,6 +150,11 @@ export class Util {
 
     this.baseConfigSaas = {
       host: `${process.env.SAAS_URL}`,
+      httpsAgent: new https.Agent({
+        rejectUnauthorized: false,
+        keepAlive: false,
+      }),
+
       authentication: {
         token: `${process.env.SAAS_TOKEN}`,
       },
@@ -239,7 +245,9 @@ export class ProxySessionOperation {
   async run() {
     let newSessionData = await this.createSession();
     let getSessionData = await this.getSession(newSessionData.data.SessionId);
-    let deleteSessionData = await this.deleteSession(newSessionData.data.SessionId);
+    let deleteSessionData = await this.deleteSession(
+      newSessionData.data.SessionId
+    );
 
     return {
       newSessionData,
