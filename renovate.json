@@ -3,8 +3,8 @@
     "config:base"
   ],
   "ignoreDeps": [
-    "@rollup/plugin-plugin-commonjs",
-    "@rollup/plugin-plugin-json",
+    "@rollup/plugin-commonjs",
+    "@rollup/plugin-json",
     "@rollup/plugin-node-resolve",
     "@rollup/plugin-typescript",
     "@types/node",
